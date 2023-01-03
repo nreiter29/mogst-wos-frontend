@@ -3,6 +3,11 @@ import type { InputProps } from '@chakra-ui/react'
 import { IconButton, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import React from 'react'
 
+interface ISearchBar extends InputProps {
+    isLoading?: boolean
+    searchOpen?: boolean
+}
+
 interface IColors {
     colorBackground?: string
     colorText?: string
@@ -10,11 +15,15 @@ interface IColors {
     colorIcon?: string
 }
 
-export const SearchBar: React.FC<IColors> = ({
+interface ICombined extends IColors, ISearchBar { }
+
+export const SearchBar: React.FC<ICombined> = ({
     colorBackground = 'secondaryBackground.500',
     colorAccent = 'accent.650',
     colorText = 'secondaryText.900',
     colorIcon = 'secondaryText.500',
+    isLoading = false,
+    searchOpen = false,
     ...inputProps
 }) => {
     return (
