@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-export interface SearchQuery {
+export interface ISearchQuery {
     search: {
         items: Array<{
             sku: string
@@ -20,16 +20,10 @@ export interface SearchQuery {
     }
 }
 
-function useSearchQuery(input: string) {
-
-    const [term, setTerm] = useState<string>()
-
-    useEffect(() => {
-        setTerm(input)
-    }, [input])
+export function useSearchQuery(input: string) {
 
     const [isLoading, setIsLoading] = useState(true)
-    const [data, setData] = useState<SearchQuery | undefined>()
+    const [data, setData] = useState<ISearchQuery | undefined>()
     const [refetched, setRefetched] = useState(false)
 
     const refetch = () => {
@@ -43,8 +37,8 @@ function useSearchQuery(input: string) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                query: `query Search($input: ${term}) {
-        search(input: { inStock: true, term: $input }) {
+                query: `query Search {
+        search(input: { inStock: true, term: "${input}" }) {
           items {
             sku
             slug
@@ -74,5 +68,3 @@ function useSearchQuery(input: string) {
 
     return { data, isLoading, refetch }
 }
-
-export default useSearchQuery

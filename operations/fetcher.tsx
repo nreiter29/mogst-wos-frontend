@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-export interface IProductData {
+interface IProductData {
   data: {
     search: {
       items: Array<{

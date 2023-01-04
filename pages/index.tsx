@@ -1,12 +1,12 @@
 import { As, Box, Button, Flex, Grid, Heading, HStack, Image, SimpleGrid, Skeleton, SkeletonText, Square, Stack, StackDivider, Text, useDisclosure, useOutsideClick, VStack } from "@chakra-ui/react";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import ProductItem from "../compounds/ProductItem";
 import { SearchBar } from "../compounds/SearchBar";
 import { formatHeadlineColor } from "../helper/formatHeadlineColor";
-import toBusinessNumber from "../helper/toBusinessNumber";
 import { useDebounce } from "../helper/useDebounce";
-import useFetchData, { IProductData } from "../operations/fetcher"
-import useSearchQuery, { SearchQuery } from "../operations/useSearchQuery";
+import useFetchData from "../operations/fetcher"
+import { useSearchQuery } from "../operations/useSearchQuery";
 import { NextLink } from "../utility/NextLink"
 
 const Home = () => {
@@ -17,7 +17,26 @@ const Home = () => {
   const [searchInput, setSearchInput] = useState('')
   const debouncedSearchInput = useDebounce(searchInput, 500)
   const { data, isLoading, refetch } = useSearchQuery(debouncedSearchInput)
-  const [searchResults, setSearchResults] = useState<SearchQuery | undefined>()
+  const [searchResults, setSearchResults] = useState<{
+    search: {
+      items: Array<{
+        sku: string
+        slug: string
+        productId: string
+        productName: string
+        productVariantId: string
+        productVariantName: string
+        description: string
+        priceWithTax: {
+          value: number
+        }
+        productVariantAsset: {
+          preview: string
+        }
+      }>,
+    }
+  }>()
+
 
   useEffect(() => {
     if (debouncedSearchInput.length > 2) {
@@ -47,12 +66,12 @@ const Home = () => {
         w="inherit"
         value={searchInput}
         onChange={e => setSearchInput(e.target.value)}
-        searchOpen={!closeSearchResults && searchResults && searchResults.search.items.length > 0}
-        isInvalid={searchResults?.search.items.length === 0}
+        searchOpen={!closeSearchResults && searchResults && (searchResults?.search?.items?.length ?? 0) < 0}
+        isInvalid={searchResults?.search?.items?.length === 0}
         errorBorderColor="red"
         onClick={() => setCloseSearchResults(false)}
       />
-      {(!closeSearchResults && searchResults && searchResults.search.items.length > 0) && (
+      {!closeSearchResults && searchResults && (searchResults?.search?.items?.length ?? 0) < 0 && (
         <Stack
           spacing={0}
           border="1px"
@@ -66,7 +85,7 @@ const Home = () => {
           overflowY="auto"
           ref={ref}
         >
-          {searchResults.search.items.map((item, index) => {
+          {searchResults?.search?.items.map((item, index) => {
             canHover = false
             return (
               <Skeleton isLoaded={!isLoading} key={"Searchbar" + item.sku + index}>
@@ -78,7 +97,12 @@ const Home = () => {
                 >
                   <NextLink href={`/product/${item.slug}?sku=${item.sku}`} onClick={() => setSearchInput('')} _hover={{ textDecor: "none" }}>
                     <HStack spacing="2">
-                      <Image h="75px" w="75px" objectFit="cover" objectPosition="center" src={item.productVariantAsset?.preview ?? "https://images.unsplash.com/photo-1661006670127-b560e732ce28?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"} alt={item.productVariantName ?? "Standard Picture"} />
+                      <Image h="75px"
+                        w="75px"
+                        objectFit="cover"
+                        objectPosition="center"
+                        src={item.productVariantAsset?.preview ?? "https://images.unsplash.com/photo-1661006670127-b560e732ce28?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"}
+                        alt={item.productVariantName ?? "Standard Picture"} />
                       <VStack spacing="0" align="flex-start">
                         <Text fontWeight="bold" _hover={{ color: 'accent.500' }} transition="0.25s">
                           {formatHeadlineColor(item.productVariantName)}
@@ -97,7 +121,7 @@ const Home = () => {
       )
       }
       {
-        (!closeSearchResults && searchResults && searchResults?.search.items.length === 0) && (
+        (!closeSearchResults && searchResults && searchResults?.search?.items.length === 0) && (
           <Box
             border="1px"
             borderTop="none"
@@ -140,26 +164,11 @@ const Home = () => {
       <Box mx="auto" maxW={{ base: "2xl", lg: "7xl" }} py={{ base: "6", sm: "0" }} px={{ base: "4", sm: "6", lg: "8" }}>
         <Heading as="h2" pb="2" pt="10">Products</Heading>
         <SimpleGrid columns={{ base: 1, sm: 2, lg: 3, xl: 4 }} gridGap='20px'>
-          {isDataLoading && [...Array(12)].map((e, i) => <Skeleton height='380px' key={'skeleton' + i} />)}
+          {isDataLoading && [...Array(12)].map((e, i) => <Skeleton height='435px' boxShadow="xl" key={'skeleton' + i} rounded="lg" />)}
           {!isDataLoading && products?.data.search.items.map((item, index) => {
             return (
-              <Box _hover={{ backgroundColor: canHover && "#eeeeee", p: canHover && "1" }} transition="1s" key={"Products" + item.sku + index} boxShadow="xl" rounded="lg" p="3">
-                <Link href="/">
-                  <Box height="380px">
-                    <Image
-                      src={item.productVariantAsset?.preview ?? "https://images.unsplash.com/photo-1661006670127-b560e732ce28?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"}
-                      alt={item.productVariantName ?? "Standard Picture"}
-                      h="full"
-                      w="full"
-                      objectFit="cover"
-                      objectPosition="center"
-                    />
-                  </Box>
-                  <HStack justify="space-between" align="center" py="2" fontSize="sm" whiteSpace="nowrap" p="1">
-                    <Heading as="h3" fontSize="sm">{item.productVariantName}</Heading>
-                    <Text>{toBusinessNumber(+item.priceWithTax.value)} €</Text>
-                  </HStack>
-                </Link>
+              <Box key={item && index}>
+                <ProductItem canHover={canHover} item={item}></ProductItem>
               </Box>
             )
           })}
