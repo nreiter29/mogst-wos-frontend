@@ -38,7 +38,7 @@ export function useSearchQuery(input: string) {
             },
             body: JSON.stringify({
                 query: `query Search {
-        search(input: { inStock: true, term: "${input}" }) {
+        search(input: { inStock: true, term: ${input === "" ? "" : `"${input}"`}, sort: { name: ASC } }) {
           items {
             sku
             slug

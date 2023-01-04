@@ -1,4 +1,4 @@
-import { As, Box, Button, Flex, Grid, Heading, HStack, Image, SimpleGrid, Skeleton, SkeletonText, Square, Stack, StackDivider, Text, useDisclosure, useOutsideClick, VStack } from "@chakra-ui/react";
+import { As, Box, Button, Flex, Grid, Heading, HStack, Image, SimpleGrid, Skeleton, SkeletonText, Square, Stack, StackDivider, Text, useDisclosure, useInterval, useOutsideClick, VStack } from "@chakra-ui/react";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ProductItem from "../compounds/ProductItem";
@@ -16,37 +16,14 @@ const Home = () => {
   const searchBar = useDisclosure()
   const [searchInput, setSearchInput] = useState('')
   const debouncedSearchInput = useDebounce(searchInput, 500)
-  const { data, isLoading, refetch } = useSearchQuery(debouncedSearchInput)
-  const [searchResults, setSearchResults] = useState<{
-    search: {
-      items: Array<{
-        sku: string
-        slug: string
-        productId: string
-        productName: string
-        productVariantId: string
-        productVariantName: string
-        description: string
-        priceWithTax: {
-          value: number
-        }
-        productVariantAsset: {
-          preview: string
-        }
-      }>,
-    }
-  }>()
+  const { data, isLoading, refetch } = useSearchQuery(searchInput)
 
 
   useEffect(() => {
     if (debouncedSearchInput.length > 2) {
       refetch()
     }
-    setSearchResults(data)
-    return () => {
-      setSearchResults(undefined)
-    }
-  }, [data, debouncedSearchInput.length, refetch])
+  }, [debouncedSearchInput.length, refetch])
 
   const ref = useRef(null)
   const [closeSearchResults, setCloseSearchResults] = useState(true)
@@ -57,21 +34,23 @@ const Home = () => {
 
   let canHover = true
 
+  console.log(closeSearchResults)
+
   const searchLogic = (
     <>
       <SearchBar
         zIndex={1000}
         isLoading={isLoading ? false : isLoading}
-        borderBottomRadius={(!closeSearchResults && searchResults) ? 0 : 20}
+        borderBottomRadius={(!closeSearchResults) ? 0 : 20}
         w="inherit"
         value={searchInput}
         onChange={e => setSearchInput(e.target.value)}
-        searchOpen={!closeSearchResults && searchResults && (searchResults?.search?.items?.length ?? 0) < 0}
-        isInvalid={searchResults?.search?.items?.length === 0}
+        searchOpen={!closeSearchResults}
+        isInvalid={data?.search?.items?.length === 0}
         errorBorderColor="red"
         onClick={() => setCloseSearchResults(false)}
       />
-      {!closeSearchResults && searchResults && (searchResults?.search?.items?.length ?? 0) < 0 && (
+      {!closeSearchResults && (
         <Stack
           spacing={0}
           border="1px"
@@ -85,7 +64,7 @@ const Home = () => {
           overflowY="auto"
           ref={ref}
         >
-          {searchResults?.search?.items.map((item, index) => {
+          {data?.search?.items.map((item, index) => {
             canHover = false
             return (
               <Skeleton isLoaded={!isLoading} key={"Searchbar" + item.sku + index}>
@@ -121,7 +100,7 @@ const Home = () => {
       )
       }
       {
-        (!closeSearchResults && searchResults && searchResults?.search?.items.length === 0) && (
+        (!closeSearchResults && data?.search?.items.length === 0) && (
           <Box
             border="1px"
             borderTop="none"
@@ -141,7 +120,7 @@ const Home = () => {
   )
 
   return (
-    <Box>
+    <Box onMouseLeave={() => setCloseSearchResults(true)}>
       <Stack spacing={0} justify="center" align="center" pt="5">
         <HStack
           spacing={{ base: 0, xl: 8 }}

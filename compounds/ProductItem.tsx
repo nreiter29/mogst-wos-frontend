@@ -1,4 +1,4 @@
-import { Box, Link, Image, HStack, Heading, Text, textDecoration, Stack } from "@chakra-ui/react"
+import { Box, Link, Image, HStack, Heading, Text, textDecoration } from "@chakra-ui/react"
 import { useState } from "react"
 import { FormattedNumber } from "react-intl"
 import { NextLink } from "../utility/NextLink"
@@ -27,7 +27,7 @@ const ProductItem: React.FC<IProductItem> = ({ canHover, item }) => {
 
     return (
         <NextLink href="/" _hover={{ textDecor: "none" }}>
-            <Stack spacing={0} _hover={{ backgroundColor: canHover && "#eeeeee", p: canHover && "0" }} onMouseEnter={() => canHover && setHover(true)} onMouseLeave={() => canHover && setHover(false)} transition=".5s" boxShadow="xl" rounded="lg" p="3" h="433px">
+            <Box _hover={{ backgroundColor: canHover && "#eeeeee", p: canHover && "0" }} onMouseEnter={() => canHover && setHover(true)} onMouseLeave={() => canHover && setHover(false)} transition=".5s" boxShadow="xl" rounded="lg" p="3" h="433px">
                 <Box height="380px">
                     <Image
                         rounded="lg"
@@ -39,7 +39,7 @@ const ProductItem: React.FC<IProductItem> = ({ canHover, item }) => {
                         objectPosition="center"
                     />
                 </Box>
-                <HStack justify="space-between" align="center" fontSize={hover ? "md" : "sm"} whiteSpace="nowrap" p="1" my={hover ? "10px" : ""} transition=".5s" mx={hover ? "3" : ""} spacing="0">
+                <HStack justify="space-between" align="center" fontSize={hover ? "md" : "sm"} p="1" my={hover ? "10px" : ""} transition=".5s" spacing="0" columnGap={"2"}>
                     <Heading as="h3" fontSize={hover ? "md" : "sm"}>{item.productVariantName}</Heading>
                     <FormattedNumber
                         value={+item.priceWithTax.value / 100}
@@ -48,7 +48,7 @@ const ProductItem: React.FC<IProductItem> = ({ canHover, item }) => {
                         minimumFractionDigits={2}
                         maximumFractionDigits={2} />
                 </HStack>
-            </Stack>
+            </Box>
         </NextLink>
     )
 }
