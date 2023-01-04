@@ -1,5 +1,5 @@
 const toBusinessNumber = (number: number) => {
-    const numberString = number.toString().split("").reverse()
+    const numberString: Array<string> = number.toString().split("").reverse()
     let result = ""
     for (let i = 0; i < numberString.length; i++) {
         if (i % 3 === 0 && i !== 0) {
@@ -7,7 +7,7 @@ const toBusinessNumber = (number: number) => {
         }
         result += numberString[i]
     }
-    return result.split("").reverse().join("")
+    return +result.split("").reverse().join("")
 }
 
 export default toBusinessNumber

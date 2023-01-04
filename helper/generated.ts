@@ -4162,7 +4162,19 @@ export type SearchQueryVariables = Exact<{
 }>;
 
 
-export type SearchQuery = { __typename?: 'Query', search: { __typename?: 'SearchResponse', items: Array<{ __typename?: 'SearchResult', id: string, sku: string, slug: string, productId: string, productName: string, productVariantId: string, productVariantName: string, description: string }> } };
+export type SearchQuery = {
+    __typename?: 'Query', search: {
+        items: Array<{
+            __typename?: 'SearchResult',
+            id: string, sku: string, slug: string, productId: string, productName: string,
+            productVariantId: string, productVariantName: string, description: string, priceWithTax: {
+                value: string
+            }, productVariantAsset: {
+                preview: string
+            }
+        }>
+    }
+};
 
 export type VariantQueryVariables = Exact<{
     id: Scalars['ID'];
@@ -5922,20 +5934,27 @@ useProductsQuery.getKey = (variables?: ProductsQueryVariables) => variables === 
 
 useProductsQuery.fetcher = (variables?: ProductsQueryVariables, options?: RequestInit['headers']) => fetchVendure<ProductsQuery, ProductsQueryVariables>(ProductsDocument, variables, options);
 export const SearchDocument = `
-    query Search($input: String!, $prefixMode: Boolean = true) {
-  search(input: {term: $input, prefixMode: $prefixMode}) {
-    items {
-      id
-      sku
-      slug
-      productId
-      productName
-      productVariantId
-      productVariantName
-      description
+query Search($input: String!) {
+    search(input: { inStock: true, term: $input }) {
+      items {
+        sku
+        slug
+        productId
+        productName
+        productVariantId
+        productVariantName
+        description
+        priceWithTax {
+          ... on SinglePrice {
+            value
+          }
+        }
+        productVariantAsset {
+          preview
+        }
+      }
     }
   }
-}
     `;
 export const useSearchQuery = <
     TData = SearchQuery,

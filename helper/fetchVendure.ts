@@ -1,6 +1,5 @@
 import { fetchData } from "../operations/fetchData"
 
-
 export const fetchVendure = <TData, TVariables>(
     query: string,
     variables?: TVariables,
