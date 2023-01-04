@@ -6,8 +6,8 @@ import { formatHeadlineColor } from "../helper/formatHeadlineColor";
 import toBusinessNumber from "../helper/toBusinessNumber";
 import { useDebounce } from "../helper/useDebounce";
 import useFetchData, { IProductData } from "../operations/fetcher"
-import { SearchQuery, useSearchQuery } from "../helper/generated";
-import { NextLink } from "../utility/NextLink";
+import useSearchQuery, { SearchQuery } from "../operations/useSearchQuery";
+import { NextLink } from "../utility/NextLink"
 
 const Home = () => {
 
@@ -16,7 +16,7 @@ const Home = () => {
   const searchBar = useDisclosure()
   const [searchInput, setSearchInput] = useState('')
   const debouncedSearchInput = useDebounce(searchInput, 500)
-  const { data, isLoading, fetchStatus, refetch } = useSearchQuery({ input: debouncedSearchInput }, { enabled: false })
+  const { data, isLoading, refetch } = useSearchQuery(debouncedSearchInput)
   const [searchResults, setSearchResults] = useState<SearchQuery | undefined>()
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const Home = () => {
   }, [data, debouncedSearchInput.length, refetch])
 
   const ref = useRef(null)
-  const [closeSearchResults, setCloseSearchResults] = useState(false)
+  const [closeSearchResults, setCloseSearchResults] = useState(true)
   useOutsideClick({
     ref: ref,
     handler: () => setCloseSearchResults(true),
@@ -42,16 +42,14 @@ const Home = () => {
     <>
       <SearchBar
         zIndex={1000}
-        // here we check the status of the query since when the query is idle the default for isLoading is true for some reason
-        // https://github.com/TanStack/query/issues/3584
-        isLoading={fetchStatus === 'idle' ? false : isLoading}
+        isLoading={isLoading ? false : isLoading}
         borderBottomRadius={(!closeSearchResults && searchResults) ? 0 : 20}
         w="inherit"
         value={searchInput}
         onChange={e => setSearchInput(e.target.value)}
         searchOpen={!closeSearchResults && searchResults && searchResults.search.items.length > 0}
         isInvalid={searchResults?.search.items.length === 0}
-        errorBorderColor="failedColor.500"
+        errorBorderColor="red"
         onClick={() => setCloseSearchResults(false)}
       />
       {(!closeSearchResults && searchResults && searchResults.search.items.length > 0) && (
@@ -71,7 +69,7 @@ const Home = () => {
           {searchResults.search.items.map((item, index) => {
             canHover = false
             return (
-              <Skeleton isLoaded={!isLoading} key={item.sku + index}>
+              <Skeleton isLoaded={!isLoading} key={"Searchbar" + item.sku + index}>
                 <Box
                   color="secondaryText.900"
                   _hover={{ bgColor: "gray.200" }}
@@ -123,7 +121,6 @@ const Home = () => {
       <Stack spacing={0} justify="center" align="center" pt="5">
         <HStack
           spacing={{ base: 0, xl: 8 }}
-          display={{ base: 'none', xl: 'inherit' }}
         >
           <Box w={{ lg: '200px', xl: '350px' }} >
             {searchLogic}
@@ -131,13 +128,8 @@ const Home = () => {
         </HStack>
         {searchBar.isOpen && (
           <Box
-            // position="absolute"
-            // left={0}
-            // top={0}
             w="100%"
             h="200px"
-            // p={5}
-            display={{ base: 'inherit', lg: 'none' }}
           >
             <Box pos="relative" w="100%">
               {searchLogic}
@@ -149,9 +141,9 @@ const Home = () => {
         <Heading as="h2" pb="2" pt="10">Products</Heading>
         <SimpleGrid columns={{ base: 1, sm: 2, lg: 3, xl: 4 }} gridGap='20px'>
           {isDataLoading && [...Array(12)].map((e, i) => <Skeleton height='380px' key={'skeleton' + i} />)}
-          {!isDataLoading && products?.data.search.items.map((item) => {
+          {!isDataLoading && products?.data.search.items.map((item, index) => {
             return (
-              <Box _hover={{ opacity: canHover && 0.75 }} transition="1s" key={item.sku} >
+              <Box _hover={{ backgroundColor: canHover && "#eeeeee", p: canHover && "1" }} transition="1s" key={"Products" + item.sku + index} boxShadow="xl" rounded="lg" p="3">
                 <Link href="/">
                   <Box height="380px">
                     <Image
@@ -163,7 +155,7 @@ const Home = () => {
                       objectPosition="center"
                     />
                   </Box>
-                  <HStack justify="space-between" align="center" py="2" fontSize="sm">
+                  <HStack justify="space-between" align="center" py="2" fontSize="sm" whiteSpace="nowrap" p="1">
                     <Heading as="h3" fontSize="sm">{item.productVariantName}</Heading>
                     <Text>{toBusinessNumber(+item.priceWithTax.value)} €</Text>
                   </HStack>
@@ -172,7 +164,7 @@ const Home = () => {
             )
           })}
         </SimpleGrid>
-      </Box>
+      </Box >
     </Box >
   )
 }

@@ -30,11 +30,11 @@ const useFetchData = () => {
     fetch('http://localhost:3001/shop-api', {
       method: 'POST',
       headers: {
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         query: `query Search {
-        search(input: { inStock: true }) {
+        search(input: { inStock: true, take: 88, sort: { name: ASC } }) {
           items {
             sku
             slug
@@ -59,10 +59,7 @@ const useFetchData = () => {
     }).then(res => res.json()).then(res => {
       setData(res)
       setIsLoading(false)
-    }).catch(err => {
-      console.log(err)
-    }
-    )
+    })
   }, [])
 
   return { isLoading, data }

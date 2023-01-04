@@ -129,5 +129,5 @@ export function formatHeadlineColor(string: string) {
     if (!match) return string
     const target = match[0]
 
-    return asComponent(string.replace(target, `<span style="color: red"> ${target.replace(/_/g, '')}</span>`))
+    return asComponent(string.replace(target, target.replace(/_/g, '')))
 }
