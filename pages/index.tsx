@@ -5,13 +5,13 @@ import ProductItem from "../compounds/ProductItem";
 import { SearchBar } from "../compounds/SearchBar";
 import { formatHeadlineColor } from "../helper/formatHeadlineColor";
 import { useDebounce } from "../helper/useDebounce";
-import useFetchData from "../operations/fetcher";
+import { useFetchData } from "../operations/fetcher";
 import { useSearchQuery } from "../operations/useSearchQuery";
 import { CustomLink } from "../utility/CustomLink";
 
 const Home = () => {
 
-  const { isLoading: isDataLoading, data: products } = useFetchData()
+  const { data: products, isLoading: isDataLoading, setFacetId, facetId } = useFetchData()
 
   const searchBar = useDisclosure()
   const [searchInput, setSearchInput] = useState('')
@@ -139,14 +139,14 @@ const Home = () => {
         )}
       </Stack>
       <HStack align="space-between" spacing="25px">
-        <Filter />
+        <Filter setFacetId={setFacetId} facetId={facetId} />
         <Box mx="auto" maxW={{ base: "2xl", lg: "7xl" }} py={{ base: "6", sm: "0" }} px={{ base: "4", sm: "6", lg: "8" }}>
           <Heading as="h2" pb="2" my="8">Products</Heading>
           <SimpleGrid columns={{ base: 1, sm: 2, lg: 3, xl: 4 }} gridGap='20px'>
             {isDataLoading && [...Array(12)].map((e, i) => <Skeleton height='435px' boxShadow="xl" key={'skeleton' + i} rounded="lg" />)}
-            {!isDataLoading && products?.data.search.items.map((item, index) => {
+            {!isDataLoading && products?.data?.search.items.map((item, index) => {
               return (
-                <Box key={item && index}>
+                <Box key={"index" + item && index}>
                   <ProductItem canHover={canHover} item={item}></ProductItem>
                 </Box>
               )

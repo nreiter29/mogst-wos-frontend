@@ -1,6 +1,7 @@
 import { Heading, HStack, VStack, Text, Box, Checkbox, Divider } from "@chakra-ui/react"
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import { BiArrowFromLeft, BiArrowFromTop } from "react-icons/bi"
+import FilterFoldedChecker from "../elements/FilterFoldedChecker"
 import { formatFirstLetterToUppercase } from "../helper/formatFirstLetterToUppercase"
 import { CustomLink } from "../utility/CustomLink"
 
@@ -9,10 +10,16 @@ const FilterFolded: React.FC<{
         name: string;
         values: {
             name: string;
+            id: string
         }[];
     },
-}> = ({ facet }) => {
+    setFacetId: (id: number | null | Array<number>) => void,
+    refetch: () => void,
+    facetId: number | null | Array<number>
+
+}> = ({ facet, setFacetId, refetch, facetId }) => {
     const [unFolded, setUnfolded] = useState(false)
+    const [facetIdArray, setFacetIdArray] = useState([-1])
 
     return (
         <VStack align="inherit" w="175px">
@@ -24,13 +31,9 @@ const FilterFolded: React.FC<{
             </CustomLink>
             <Box>
                 {unFolded && facet.values.map((item, index) => {
+
                     return (
-                        <>
-                            <HStack key={item && index} align="inherit" pb={(index + 1) == facet.values.length ? "10px" : ""} justify="space-between">
-                                <Text fontWeight="semibold">{formatFirstLetterToUppercase(item.name)}</Text>
-                                <Checkbox />
-                            </HStack>
-                        </>
+                        <FilterFoldedChecker key={"FilterFolded" + item && index + item.id} item={item} setFacetIdArray={setFacetIdArray} setFacetId={setFacetId} facetIdArray={facetIdArray} index={index} length={facet.values.length} facetId={facetId}></FilterFoldedChecker>
                     )
                 }
                 )

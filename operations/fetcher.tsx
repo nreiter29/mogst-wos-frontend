@@ -22,19 +22,65 @@ interface IProductData {
   }
 }
 
-const useFetchData = () => {
+export function useFetchData() {
+  const [facetId, setFacetId] = useState<number | null | Array<number>>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [data, setData] = useState<IProductData | undefined>()
+  const [data, setData] = useState<IProductData>()
+  const [refetched, setRefetched] = useState(false)
+
+  const refetch = () => {
+    setRefetched(!refetched)
+  }
 
   useEffect(() => {
-    fetch('http://localhost:3001/shop-api', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query: `query Search {
-        search(input: { inStock: true, take: 88, sort: { name: ASC } }) {
+    refetch()
+  }, [facetId])
+
+
+  useEffect(() => {
+    if (facetId == null) {
+      fetch('http://localhost:3001/shop-api', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: `query Search {
+          search(input: { inStock: true, take: 88, sort: { name: ASC }}) {
+            items {
+              sku
+              slug
+              productId
+              productName
+              productVariantId
+              productVariantName
+              description
+              priceWithTax {
+                ... on SinglePrice {
+                  value
+                }
+              }
+              productVariantAsset {
+                preview
+              }
+            }
+          }
+        }
+        `
+        })
+      }).then(res => res.json()).then(res => {
+        setData(res)
+        setIsLoading(false)
+      })
+    } else {
+      fetch('http://localhost:3001/shop-api', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: `query Search {
+        search(input: { inStock: true, take: 88, sort: { name: ASC }, facetValueIds: "${facetId}"}) {
           items {
             sku
             slug
@@ -55,14 +101,13 @@ const useFetchData = () => {
         }
       }
       `
+        })
+      }).then(res => res.json()).then(res => {
+        setData(res)
+        setIsLoading(false)
       })
-    }).then(res => res.json()).then(res => {
-      setData(res)
-      setIsLoading(false)
-    })
-  }, [])
+    }
+  }, [refetched])
 
-  return { isLoading, data }
+  return { data, isLoading, setFacetId, facetId }
 }
-
-export default useFetchData

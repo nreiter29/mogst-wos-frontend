@@ -7,6 +7,7 @@ export interface IFacets {
                 name: string
                 values: Array<{
                     name: string
+                    id: string
                 }>
             }>
         }
@@ -36,6 +37,7 @@ export function useFacetsQuery() {
                         name
                         values {
                           name
+                          id
                         }
                       }
                     }
