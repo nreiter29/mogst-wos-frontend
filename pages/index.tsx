@@ -1,13 +1,13 @@
-import { As, Box, Button, Flex, Grid, Heading, HStack, Image, SimpleGrid, Skeleton, SkeletonText, Square, Stack, StackDivider, Text, useDisclosure, useInterval, useOutsideClick, VStack } from "@chakra-ui/react";
-import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Box, Heading, HStack, Image, SimpleGrid, Skeleton, Stack, StackDivider, Text, useDisclosure, useOutsideClick, VStack } from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
+import Filter from "../compounds/Filter";
 import ProductItem from "../compounds/ProductItem";
 import { SearchBar } from "../compounds/SearchBar";
 import { formatHeadlineColor } from "../helper/formatHeadlineColor";
 import { useDebounce } from "../helper/useDebounce";
-import useFetchData from "../operations/fetcher"
+import useFetchData from "../operations/fetcher";
 import { useSearchQuery } from "../operations/useSearchQuery";
-import { NextLink } from "../utility/NextLink"
+import { CustomLink } from "../utility/CustomLink";
 
 const Home = () => {
 
@@ -20,7 +20,7 @@ const Home = () => {
 
 
   useEffect(() => {
-    if (debouncedSearchInput.length > 2) {
+    if (debouncedSearchInput.length > 2 && data?.data.search.items.length != 0) {
       refetch()
     }
   }, [debouncedSearchInput.length, refetch])
@@ -34,8 +34,6 @@ const Home = () => {
 
   let canHover = true
 
-  console.log(closeSearchResults)
-
   const searchLogic = (
     <>
       <SearchBar
@@ -46,7 +44,7 @@ const Home = () => {
         value={searchInput}
         onChange={e => setSearchInput(e.target.value)}
         searchOpen={!closeSearchResults}
-        isInvalid={data?.search?.items?.length === 0}
+        isInvalid={data?.data.search?.items?.length == 0}
         errorBorderColor="red"
         onClick={() => setCloseSearchResults(false)}
       />
@@ -64,7 +62,7 @@ const Home = () => {
           overflowY="auto"
           ref={ref}
         >
-          {data?.search?.items.map((item, index) => {
+          {data?.data.search?.items.map((item, index) => {
             canHover = false
             return (
               <Skeleton isLoaded={!isLoading} key={"Searchbar" + item.sku + index}>
@@ -74,7 +72,7 @@ const Home = () => {
                   p="10px"
                   transition="0.25s"
                 >
-                  <NextLink href={`/product/${item.slug}?sku=${item.sku}`} onClick={() => setSearchInput('')} _hover={{ textDecor: "none" }}>
+                  <CustomLink href={`/product/${item.slug}?sku=${item.sku}`} onClick={() => setSearchInput('')} _hover={{ textDecor: "none" }}>
                     <HStack spacing="2">
                       <Image h="75px"
                         w="75px"
@@ -91,7 +89,7 @@ const Home = () => {
                         </Text>
                       </VStack>
                     </HStack>
-                  </NextLink>
+                  </CustomLink>
                 </Box>
               </Skeleton>
             )
@@ -100,7 +98,7 @@ const Home = () => {
       )
       }
       {
-        (!closeSearchResults && data?.search?.items.length === 0) && (
+        (!closeSearchResults && data?.data.search?.items.length === 0) && (
           <Box
             border="1px"
             borderTop="none"
@@ -111,7 +109,7 @@ const Home = () => {
             padding="15px"
           >
             <Text fontWeight="bold">
-              Kein Ergebnis gefunden
+              No results found
             </Text>
           </Box>
         )
@@ -120,7 +118,7 @@ const Home = () => {
   )
 
   return (
-    <Box onMouseLeave={() => setCloseSearchResults(true)}>
+    <VStack onMouseLeave={() => setCloseSearchResults(true)}>
       <Stack spacing={0} justify="center" align="center" pt="5">
         <HStack
           spacing={{ base: 0, xl: 8 }}
@@ -140,20 +138,23 @@ const Home = () => {
           </Box>
         )}
       </Stack>
-      <Box mx="auto" maxW={{ base: "2xl", lg: "7xl" }} py={{ base: "6", sm: "0" }} px={{ base: "4", sm: "6", lg: "8" }}>
-        <Heading as="h2" pb="2" pt="10">Products</Heading>
-        <SimpleGrid columns={{ base: 1, sm: 2, lg: 3, xl: 4 }} gridGap='20px'>
-          {isDataLoading && [...Array(12)].map((e, i) => <Skeleton height='435px' boxShadow="xl" key={'skeleton' + i} rounded="lg" />)}
-          {!isDataLoading && products?.data.search.items.map((item, index) => {
-            return (
-              <Box key={item && index}>
-                <ProductItem canHover={canHover} item={item}></ProductItem>
-              </Box>
-            )
-          })}
-        </SimpleGrid>
-      </Box >
-    </Box >
+      <HStack align="space-between" spacing="25px">
+        <Filter />
+        <Box mx="auto" maxW={{ base: "2xl", lg: "7xl" }} py={{ base: "6", sm: "0" }} px={{ base: "4", sm: "6", lg: "8" }}>
+          <Heading as="h2" pb="2" my="8">Products</Heading>
+          <SimpleGrid columns={{ base: 1, sm: 2, lg: 3, xl: 4 }} gridGap='20px'>
+            {isDataLoading && [...Array(12)].map((e, i) => <Skeleton height='435px' boxShadow="xl" key={'skeleton' + i} rounded="lg" />)}
+            {!isDataLoading && products?.data.search.items.map((item, index) => {
+              return (
+                <Box key={item && index}>
+                  <ProductItem canHover={canHover} item={item}></ProductItem>
+                </Box>
+              )
+            })}
+          </SimpleGrid>
+        </Box>
+      </HStack>
+    </VStack>
   )
 }
 

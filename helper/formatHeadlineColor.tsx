@@ -1,6 +1,6 @@
 import { As, Heading, ListItem, OrderedList, UnorderedList, Text } from '@chakra-ui/react'
 import parse, { domToReact } from 'html-react-parser'
-import { NextLink } from '../utility/NextLink'
+import { NextLink } from '../utility/CustomLink'
 import type { DOMNode, Element, HTMLReactParserOptions } from 'html-react-parser'
 
 const toCamelCase = (s: string) => s.replace(/-./g, x => x[1].toUpperCase())

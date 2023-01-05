@@ -1,7 +1,7 @@
 import { Box, Link, Image, HStack, Heading, Text, textDecoration } from "@chakra-ui/react"
 import { useState } from "react"
 import { FormattedNumber } from "react-intl"
-import { NextLink } from "../utility/NextLink"
+import { CustomLink } from "../utility/CustomLink"
 
 export interface IProductItem {
     canHover: boolean
@@ -26,8 +26,8 @@ const ProductItem: React.FC<IProductItem> = ({ canHover, item }) => {
     const [hover, setHover] = useState(false)
 
     return (
-        <NextLink href="/" _hover={{ textDecor: "none" }}>
-            <Box _hover={{ backgroundColor: canHover && "#eeeeee", p: canHover && "0" }} onMouseEnter={() => canHover && setHover(true)} onMouseLeave={() => canHover && setHover(false)} transition=".5s" boxShadow="xl" rounded="lg" p="3" h="433px">
+        <CustomLink href="/" _hover={{ textDecor: "none" }}>
+            <Box _hover={{ backgroundColor: canHover && "#eeeeee", p: canHover && "0" }} onMouseEnter={() => canHover && setHover(true)} onMouseLeave={() => canHover && setHover(false)} transition=".5s" boxShadow="xl" rounded="lg" p="3" h="440px">
                 <Box height="380px">
                     <Image
                         rounded="lg"
@@ -49,7 +49,7 @@ const ProductItem: React.FC<IProductItem> = ({ canHover, item }) => {
                         maximumFractionDigits={2} />
                 </HStack>
             </Box>
-        </NextLink>
+        </CustomLink>
     )
 }
 

@@ -1,22 +1,24 @@
 import { useEffect, useState } from "react"
 
 export interface ISearchQuery {
-    search: {
-        items: Array<{
-            sku: string
-            slug: string
-            productId: string
-            productName: string
-            productVariantId: string
-            productVariantName: string
-            description: string
-            priceWithTax: {
-                value: number
-            }
-            productVariantAsset: {
-                preview: string
-            }
-        }>,
+    data: {
+        search: {
+            items: Array<{
+                sku: string
+                slug: string
+                productId: string
+                productName: string
+                productVariantId: string
+                productVariantName: string
+                description: string
+                priceWithTax: {
+                    value: number
+                }
+                productVariantAsset: {
+                    preview: string
+                }
+            }>,
+        }
     }
 }
 
@@ -38,7 +40,7 @@ export function useSearchQuery(input: string) {
             },
             body: JSON.stringify({
                 query: `query Search {
-        search(input: { inStock: true, term: ${input === "" ? "" : `"${input}"`}, sort: { name: ASC } }) {
+        search(input: { inStock: true, term: "${input}", sort: { name: ASC } }) {
           items {
             sku
             slug
