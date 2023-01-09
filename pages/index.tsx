@@ -141,7 +141,7 @@ const Home = () => {
       <HStack align="space-between" spacing="25px">
         <Filter setFacetId={setFacetId} facetId={facetId} />
         <Box mx="auto" maxW={{ base: "2xl", lg: "7xl" }} py={{ base: "6", sm: "0" }} px={{ base: "4", sm: "6", lg: "8" }}>
-          <Heading as="h2" pb="2" my="8">Products</Heading>
+          <Heading as="h2" my="8">Products</Heading>
           <SimpleGrid columns={{ base: 1, sm: 2, lg: 3, xl: 4 }} gridGap='20px'>
             {isDataLoading && [...Array(12)].map((e, i) => <Skeleton height='435px' boxShadow="xl" key={'skeleton' + i} rounded="lg" />)}
             {!isDataLoading && products?.data?.search.items.map((item, index) => {

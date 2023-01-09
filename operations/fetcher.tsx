@@ -23,7 +23,7 @@ interface IProductData {
 }
 
 export function useFetchData() {
-  const [facetId, setFacetId] = useState<number | null | Array<number>>(null)
+  const [facetId, setFacetId] = useState<null | number[]>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [data, setData] = useState<IProductData>()
   const [refetched, setRefetched] = useState(false)
@@ -36,6 +36,7 @@ export function useFetchData() {
     refetch()
   }, [facetId])
 
+  console.log(facetId)
 
   useEffect(() => {
     if (facetId == null) {
@@ -80,7 +81,7 @@ export function useFetchData() {
         },
         body: JSON.stringify({
           query: `query Search {
-        search(input: { inStock: true, take: 88, sort: { name: ASC }, facetValueIds: "${facetId}"}) {
+        search(input: { inStock: true, take: 88, sort: { name: ASC }, facetValueIds: [${facetId}]}) {
           items {
             sku
             slug
@@ -107,7 +108,7 @@ export function useFetchData() {
         setIsLoading(false)
       })
     }
-  }, [refetched])
+  }, [refetched, facetId])
 
   return { data, isLoading, setFacetId, facetId }
 }

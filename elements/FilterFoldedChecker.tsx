@@ -1,4 +1,4 @@
-import { HStack, Text, Checkbox } from "@chakra-ui/react"
+import { HStack, Text, Checkbox, Box } from "@chakra-ui/react"
 import { useEffect, useState } from "react";
 import { formatFirstLetterToUppercase } from "../helper/formatFirstLetterToUppercase";
 
@@ -7,35 +7,42 @@ const FilterFoldedChecker: React.FC<{
         name: string;
         id: string;
     },
-    setFacetId: (id: number | null | Array<number>) => void,
+    setFacetId: (id: null | number[]) => void,
     index: number,
     length: number,
-    facetId: number | null | Array<number>,
-    facetIdArray: Array<number>,
-    setFacetIdArray: (facetIdArray: Array<number>) => void
-}> = ({ item, setFacetId, index, length, facetIdArray, facetId, setFacetIdArray }) => {
+    facetId: null | number[],
+    selectedFacets: Array<number>,
+    setSelectedFacets: (facetIdArray: Array<number>) => void,
+    refetch: () => void,
+    unFolded: boolean
+}> = ({ item, setFacetId, index, length, selectedFacets: facetIdArray, refetch, setSelectedFacets: setFacetIdArray, facetId, unFolded }) => {
     const [isChecked, useIsChecked] = useState<boolean>(false)
 
-    console.log(facetIdArray)
+    useEffect(() => {
+        console.log("in:", facetIdArray)
+    }, [facetIdArray])
+
     useEffect(() => {
         if (isChecked) {
-            setFacetId(Number(item.id))
-            facetIdArray.push(Number(item.id))
-            if (facetIdArray.length > 2) {
+            setFacetIdArray(facetIdArray.concat(Number(item.id)))
+            setFacetId(facetIdArray.concat(Number(item.id)))
+        } else if (!isChecked) {
+            if (facetIdArray.length != 0) {
+                const idx = facetIdArray.indexOf(Number(item.id))
+                facetIdArray.splice(idx, 1)
                 setFacetId(facetIdArray)
             }
-        } else if (!isChecked) {
-            setFacetId(null)
         }
+        refetch()
     }, [isChecked])
 
     return (
-        <>
-            <HStack align="inherit" pb={(index + 1) == length ? "10px" : ""} justify="space-between">
+        <Box display={unFolded ? "normal" : "none"}>
+            <HStack align="inherit" pb={(index + 1) == length ? "10px" : ""} justify="space-between" fontSize="sm">
                 <Text fontWeight="semibold">{formatFirstLetterToUppercase(item.name)}</Text>
                 <Checkbox onChange={() => useIsChecked(!isChecked)} />
             </HStack>
-        </>
+        </Box>
     )
 }
 

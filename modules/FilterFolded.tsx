@@ -13,13 +13,13 @@ const FilterFolded: React.FC<{
             id: string
         }[];
     },
-    setFacetId: (id: number | null | Array<number>) => void,
+    setFacetId: (id: null | number[]) => void,
     refetch: () => void,
-    facetId: number | null | Array<number>
-
-}> = ({ facet, setFacetId, refetch, facetId }) => {
+    facetId: null | number[],
+    selectedFacets: Array<number>,
+    setSelectedFacets: (facetIdArray: Array<number>) => void,
+}> = ({ facet, setFacetId, refetch, facetId, selectedFacets: facetIdArray, setSelectedFacets: setSelectedFacets }) => {
     const [unFolded, setUnfolded] = useState(false)
-    const [facetIdArray, setFacetIdArray] = useState([-1])
 
     return (
         <VStack align="inherit" w="175px">
@@ -30,10 +30,10 @@ const FilterFolded: React.FC<{
                 </HStack>
             </CustomLink>
             <Box>
-                {unFolded && facet.values.map((item, index) => {
+                {facet.values.map((item, index) => {
 
                     return (
-                        <FilterFoldedChecker key={"FilterFolded" + item && index + item.id} item={item} setFacetIdArray={setFacetIdArray} setFacetId={setFacetId} facetIdArray={facetIdArray} index={index} length={facet.values.length} facetId={facetId}></FilterFoldedChecker>
+                        <FilterFoldedChecker key={"FilterFolded" + item && index + item.id} unFolded={unFolded} refetch={() => refetch} item={item} setSelectedFacets={setSelectedFacets} setFacetId={setFacetId} selectedFacets={facetIdArray} index={index} length={facet.values.length} facetId={facetId}></FilterFoldedChecker>
                     )
                 }
                 )
