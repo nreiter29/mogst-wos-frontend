@@ -36,8 +36,6 @@ export function useFetchData() {
     refetch()
   }, [facetId])
 
-  console.log(facetId)
-
   useEffect(() => {
     if (facetId == null) {
       fetch('http://localhost:3001/shop-api', {

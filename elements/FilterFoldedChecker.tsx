@@ -19,10 +19,6 @@ const FilterFoldedChecker: React.FC<{
     const [isChecked, useIsChecked] = useState<boolean>(false)
 
     useEffect(() => {
-        console.log("in:", facetIdArray)
-    }, [facetIdArray])
-
-    useEffect(() => {
         if (isChecked) {
             setFacetIdArray(facetIdArray.concat(Number(item.id)))
             setFacetId(facetIdArray.concat(Number(item.id)))
