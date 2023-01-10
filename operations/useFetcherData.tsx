@@ -49,6 +49,10 @@ export function useFetchData() {
   }, [facetId, site])
 
   useEffect(() => {
+    setSite(0)
+  }, [facetId])
+
+  useEffect(() => {
     if (facetId == null) {
       fetch('http://localhost:3001/shop-api', {
         method: 'POST',
