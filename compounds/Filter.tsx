@@ -16,8 +16,9 @@ const Filter: React.FC<{
             name: string;
             id: string;
         }>
-    }
-}> = ({ setFacetId, facetId, facetValues }) => {
+    },
+    isLoading: boolean
+}> = ({ setFacetId, facetId, facetValues, isLoading }) => {
     const [selectedFacets, setSelectedFacets] = useState<number[]>([])
     const [isChecked, setIsChecked] = useState<boolean | undefined>()
     let idx = 0
@@ -32,6 +33,7 @@ const Filter: React.FC<{
         <VStack py={{ base: "6", sm: "0" }} px={{ base: "4", sm: "6", lg: "8" }} align="left">
             <Heading fontSize="3xl" as="h3" my="8">Filter</Heading>
             <VStack align="inherit">
+                {isLoading && [...Array(4)].map((e, i) => <Skeleton key={'skeleton' + i} w="175px" h="46px" />)}
                 {Object.keys(facetValues).map((facet, index) => {
                     idx++
                     return (
@@ -42,7 +44,7 @@ const Filter: React.FC<{
                 })
                 }
             </VStack>
-            <Button onClick={() => (setFacetId([]), toast({
+            <Button fontSize="lg" onClick={() => (setFacetId([]), toast({
                 title: "Filter reseted",
                 description: "The filter reseted succesfully.",
                 status: "success",

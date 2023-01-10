@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 interface IProductData {
   data: {
     search: {
+      totalItems: number
       items: Array<{
         sku: string
         slug: string
@@ -37,6 +38,7 @@ export function useFetchData() {
   const [isLoading, setIsLoading] = useState(true)
   const [data, setData] = useState<IProductData>()
   const [refetched, setRefetched] = useState(false)
+  const [site, setSite] = useState<number>(0)
 
   const refetch = () => {
     setRefetched(!refetched)
@@ -44,7 +46,7 @@ export function useFetchData() {
 
   useEffect(() => {
     refetch()
-  }, [facetId])
+  }, [facetId, site])
 
   useEffect(() => {
     if (facetId == null) {
@@ -55,7 +57,8 @@ export function useFetchData() {
         },
         body: JSON.stringify({
           query: `query Search {
-          search(input: { inStock: true, take: 88, sort: { name: ASC }}) {
+          search(input: { inStock: true, take: 8, sort: { name: ASC }, skip: ${site * 8}}) {
+            totalItems
             items {
               sku
               slug
@@ -99,7 +102,8 @@ export function useFetchData() {
         },
         body: JSON.stringify({
           query: `query Search {
-        search(input: { inStock: true, take: 88, sort: { name: ASC }, facetValueIds: [${facetId}]}) {
+        search(input: { inStock: true, take: 8, sort: { name: ASC }, facetValueIds: [${facetId}], skip: ${site * 8}}) {
+          totalItems
           items {
             sku
             slug
@@ -138,5 +142,5 @@ export function useFetchData() {
     }
   }, [refetched])
 
-  return { data, isLoading, setFacetId, facetId }
+  return { data, isLoading, setFacetId, facetId, site, setSite }
 }
