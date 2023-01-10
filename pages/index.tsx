@@ -1,8 +1,9 @@
-import { Box, Heading, HStack, Image, SimpleGrid, Skeleton, Stack, StackDivider, Text, useDisclosure, useOutsideClick, VStack } from "@chakra-ui/react";
+import { Box, Container, Heading, HStack, Image, SimpleGrid, Skeleton, Stack, StackDivider, Text, useDisclosure, useOutsideClick, VStack } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import Filter from "../compounds/Filter";
 import Pagination from "../compounds/Pagination";
 import ProductItem from "../compounds/ProductItem";
+import AccountMenu from "../compounds/AccountMenu";
 import { SearchBar } from "../compounds/SearchBar";
 import { formatHeadlineColor } from "../helper/formatHeadlineColor";
 import { useDebounce } from "../helper/useDebounce";
@@ -142,47 +143,48 @@ const Home = () => {
     return formattedValues
   }
 
-  // console.log(formatFacetValues(products?.data.search.facetValues ?? []))
-
   return (
-    <VStack onMouseLeave={() => setCloseSearchResults(true)}>
-      <Stack spacing={0} justify="center" align="center" pt="5">
-        <HStack
-          spacing={{ base: 0, xl: 8 }}
-        >
-          <Box w={{ lg: '200px', xl: '350px' }} >
-            {searchLogic}
-          </Box>
-        </HStack>
-        {searchBar.isOpen && (
-          <Box
-            w="100%"
-            h="200px"
+    <Container maxW="container.xl">
+      <VStack onMouseLeave={() => setCloseSearchResults(true)} spacing="0">
+        <AccountMenu></AccountMenu>
+        <Stack justify="center" align="center" pos="absolute" top="5">
+          <HStack
+            spacing={{ base: 0, xl: 8 }}
           >
-            <Box pos="relative" w="100%">
+            <Box w={{ lg: '200px', xl: '350px' }} >
               {searchLogic}
             </Box>
+          </HStack>
+          {searchBar.isOpen && (
+            <Box
+              w="100%"
+              h="200px"
+            >
+              <Box pos="relative" w="100%">
+                {searchLogic}
+              </Box>
+            </Box>
+          )}
+        </Stack>
+        <HStack align="start" justify="space-between" w="full">
+          <Filter setFacetId={setFacetId} facetId={facetId} facetValues={formatFacetValues(products?.data.search.facetValues ?? [])} isLoading={isDataLoading} />
+          <Box mx="auto" maxW={{ base: "2xl", lg: "7xl" }} py={{ base: "6", sm: "0" }} pl={{ base: "4", sm: "6", lg: "8" }}>
+            <Heading as="h2" my="8">Products</Heading>
+            <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} gridGap='20px' mb="35px">
+              {isDataLoading && [...Array(6)].map((e, i) => <Skeleton height='428px' w="277px" boxShadow="xl" key={'skeleton' + i} rounded="lg" />)}
+              {!isDataLoading && products?.data?.search.items.map((item, index) => {
+                return (
+                  <Box key={"index" + item && index} w="277px" h="428px">
+                    <ProductItem canHover={canHover} item={item}></ProductItem>
+                  </Box>
+                )
+              })}
+            </SimpleGrid>
+            <Pagination site={site} setSite={setSite} totalItems={products?.data.search.totalItems ?? 0} isLoading={isDataLoading}></Pagination>
           </Box>
-        )}
-      </Stack>
-      <HStack align="space-between" spacing="25px">
-        <Filter setFacetId={setFacetId} facetId={facetId} facetValues={formatFacetValues(products?.data.search.facetValues ?? [])} isLoading={isDataLoading} />
-        <Box mx="auto" maxW={{ base: "2xl", lg: "7xl" }} py={{ base: "6", sm: "0" }} px={{ base: "4", sm: "6", lg: "8" }}>
-          <Heading as="h2" my="8">Products</Heading>
-          <SimpleGrid columns={{ base: 1, sm: 2, lg: 3, xl: 4 }} gridGap='20px' pb="25px">
-            {isDataLoading && [...Array(8)].map((e, i) => <Skeleton height='428px' w="277px" boxShadow="xl" key={'skeleton' + i} rounded="lg" />)}
-            {!isDataLoading && products?.data?.search.items.map((item, index) => {
-              return (
-                <Box key={"index" + item && index} w="277px" h="428px">
-                  <ProductItem canHover={canHover} item={item}></ProductItem>
-                </Box>
-              )
-            })}
-          </SimpleGrid>
-          <Pagination site={site} setSite={setSite} totalItems={products?.data.search.totalItems ?? 0}></Pagination>
-        </Box>
-      </HStack>
-    </VStack>
+        </HStack>
+      </VStack>
+    </Container>
   )
 }
 

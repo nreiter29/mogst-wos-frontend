@@ -52,6 +52,7 @@ export function useFetchData() {
     setSite(0)
   }, [facetId])
 
+  // TODO: if else 
   useEffect(() => {
     if (facetId == null) {
       fetch('http://localhost:3001/shop-api', {
@@ -61,7 +62,7 @@ export function useFetchData() {
         },
         body: JSON.stringify({
           query: `query Search {
-          search(input: { inStock: true, take: 8, sort: { name: ASC }, skip: ${site * 8}}) {
+          search(input: { inStock: true, take: 6, sort: { name: ASC }, skip: ${site * 6}}) {
             totalItems
             items {
               sku
@@ -106,7 +107,7 @@ export function useFetchData() {
         },
         body: JSON.stringify({
           query: `query Search {
-        search(input: { inStock: true, take: 8, sort: { name: ASC }, facetValueIds: [${facetId}], skip: ${site * 8}}) {
+        search(input: { inStock: true, take: 6, sort: { name: ASC }, facetValueIds: [${facetId}], skip: ${site * 6}}) {
           totalItems
           items {
             sku

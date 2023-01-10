@@ -44,13 +44,16 @@ const Filter: React.FC<{
                 })
                 }
             </VStack>
-            <Button fontSize="lg" onClick={() => (setFacetId([]), toast({
-                title: "Filter reseted",
-                description: "The filter reseted succesfully.",
-                status: "success",
-                duration: 2500,
-                isClosable: true
-            }), setIsChecked(false))}>Reset filter</Button>
+            {isLoading ?
+                <Skeleton w="175px" h="40px" /> :
+                <Button fontSize="lg" onClick={() => (setFacetId([]), toast({
+                    title: "Filter reseted",
+                    description: "The filter reseted succesfully.",
+                    status: "success",
+                    duration: 2500,
+                    isClosable: true
+                }), setIsChecked(false))}>Reset filter</Button>
+            }
         </VStack >
     )
 }
