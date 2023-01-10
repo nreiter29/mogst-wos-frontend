@@ -1,66 +1,188 @@
-import { Box, Button, Grid, Heading, HStack, Image, SimpleGrid, Text } from "@chakra-ui/react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import fetchData from "../operations/fetcher"
+import { Box, Heading, HStack, Image, SimpleGrid, Skeleton, Stack, StackDivider, Text, useDisclosure, useOutsideClick, VStack } from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
+import Filter from "../compounds/Filter";
+import Pagination from "../compounds/Pagination";
+import ProductItem from "../compounds/ProductItem";
+import { SearchBar } from "../compounds/SearchBar";
+import { formatHeadlineColor } from "../helper/formatHeadlineColor";
+import { useDebounce } from "../helper/useDebounce";
+import { useFetchData } from "../operations/useFetcherData";
+import { useSearchQuery } from "../operations/useSearchQuery";
+import { CustomLink } from "../utility/CustomLink";
 
 const Home = () => {
-  const [products, setProducts] = useState<{
-    data: {
-      products: {
-        items: Array<{
-          variants: Array<{
-            name: string,
-            priceWithTax: number,
-          }>,
-          assets: Array<{
-            source: string,
-            name: string,
-          }>
-        }>
-      }
-    }
-  }>()
 
-  const fetchProducts = async () => {
-    setProducts(await fetchData())
-  }
+  const { data: products, isLoading: isDataLoading, setFacetId, facetId, site, setSite } = useFetchData()
+
+  const searchBar = useDisclosure()
+  const [searchInput, setSearchInput] = useState('')
+  const debouncedSearchInput = useDebounce(searchInput, 500)
+  const { data, isLoading, refetch } = useSearchQuery(searchInput)
+
 
   useEffect(() => {
-    fetchProducts()
-  }, [])
+    if (debouncedSearchInput.length > 2 && data?.data.search.items.length != 0) {
+      refetch()
+    }
+  }, [debouncedSearchInput.length, refetch])
 
-  return (
-    <Box backgroundColor="white">
-      <Box mx="auto" maxW={{ base: "2xl", lg: "7xl" }} py={{ base: "16", sm: "24" }} px={{ base: "4", sm: "6", lg: "8" }}>
-        <Heading as="h2" p="4">Products</Heading>
-        <SimpleGrid columns={{ base: 1, sm: 2, lg: 3, xl: 4 }}>
-          {products?.data.products.items.map((product, index) => {
-            console.log(product)
+  const ref = useRef(null)
+  const [closeSearchResults, setCloseSearchResults] = useState(true)
+  useOutsideClick({
+    ref: ref,
+    handler: () => setCloseSearchResults(true),
+  })
+
+  let canHover = true
+
+  const searchLogic = (
+    <>
+      <SearchBar
+        zIndex={1000}
+        isLoading={isLoading ? false : isLoading}
+        borderBottomRadius={(!closeSearchResults) ? 0 : 20}
+        w="inherit"
+        value={searchInput}
+        onChange={e => setSearchInput(e.target.value)}
+        searchOpen={!closeSearchResults}
+        isInvalid={data?.data.search?.items?.length == 0}
+        errorBorderColor="red"
+        onClick={() => setCloseSearchResults(false)}
+      />
+      {!closeSearchResults && (
+        <Stack
+          spacing={0}
+          border="1px"
+          borderTop="none"
+          borderColor="gray.300"
+          bg="white"
+          position="absolute"
+          w="inherit"
+          divider={<StackDivider borderColor="gray.300" />}
+          maxH="500px"
+          overflowY="auto"
+          ref={ref}
+        >
+          {data?.data.search?.items.map((item, index) => {
+            canHover = false
             return (
-              <Box m="2">
-                <Link key={`${product.assets[0].name}${index}`} href={""}>
-                  <Box h="380px" w="100%">
-                    <Image
-                      src={product.assets[0].source}
-                      alt={product.assets[0].name}
-                      h="full"
-                      w="full"
-                      objectFit="cover"
-                      objectPosition="center"
-                      _groupHover={{ opacity: 0.75 }}
-                    />
-                  </Box>
-                  <HStack justify="space-between" align="center" py="2" fontSize="sm">
-                    <Heading as="h3" fontSize="sm" textColor="gray.700">{product.variants[0].name}</Heading>
-                    <Text textColor="gray.900">{product.variants[0].priceWithTax} €</Text>
-                  </HStack>
-                </Link>
-              </Box>
+              <Skeleton isLoaded={!isLoading} key={"Searchbar" + item.sku + index}>
+                <Box
+                  color="secondaryText.900"
+                  _hover={{ bgColor: "gray.200" }}
+                  p="10px"
+                  transition="0.25s"
+                >
+                  <CustomLink href={`/product/${item.slug}?sku=${item.sku}`} onClick={() => setSearchInput('')} _hover={{ textDecor: "none" }}>
+                    <HStack spacing="2">
+                      <Image h="75px"
+                        w="75px"
+                        objectFit="cover"
+                        objectPosition="center"
+                        src={item.productVariantAsset?.preview ?? "https://images.unsplash.com/photo-1661006670127-b560e732ce28?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"}
+                        alt={item.productVariantName ?? "Standard Picture"} />
+                      <VStack spacing="0" align="flex-start">
+                        <Text fontWeight="bold" _hover={{ color: 'accent.500' }} transition="0.25s">
+                          {formatHeadlineColor(item.productVariantName)}
+                        </Text>
+                        <Text color="gray">
+                          Artikelnummer: {item.sku}
+                        </Text>
+                      </VStack>
+                    </HStack>
+                  </CustomLink>
+                </Box>
+              </Skeleton>
             )
           })}
-        </SimpleGrid>
-      </Box>
-    </Box >
+        </Stack>
+      )
+      }
+      {
+        (!closeSearchResults && data?.data.search?.items.length === 0) && (
+          <Box
+            border="1px"
+            borderTop="none"
+            borderColor="gray.300"
+            bg="white"
+            position="absolute"
+            w="inherit"
+            padding="15px"
+          >
+            <Text fontWeight="bold">
+              No results found
+            </Text>
+          </Box>
+        )
+      }
+    </>
+  )
+
+  function formatFacetValues(facetValues: Array<{
+    facetValue: {
+      name: string
+      id: string
+      facet: {
+        name: string
+        id: string
+      }
+    }
+  }>) {
+    const formattedValues: { [key: string]: Array<{ name: string, id: string }> } = {}
+    facetValues.forEach(facetValue => {
+      if (formattedValues[facetValue.facetValue.facet.name]) {
+        formattedValues[facetValue.facetValue.facet.name].push({
+          name: facetValue.facetValue.name, id: facetValue.facetValue.id,
+        })
+      } else {
+        formattedValues[facetValue.facetValue.facet.name] = [{ name: facetValue.facetValue.name, id: facetValue.facetValue.id }]
+      }
+    })
+
+    return formattedValues
+  }
+
+  // console.log(formatFacetValues(products?.data.search.facetValues ?? []))
+
+  return (
+    <VStack onMouseLeave={() => setCloseSearchResults(true)}>
+      <Stack spacing={0} justify="center" align="center" pt="5">
+        <HStack
+          spacing={{ base: 0, xl: 8 }}
+        >
+          <Box w={{ lg: '200px', xl: '350px' }} >
+            {searchLogic}
+          </Box>
+        </HStack>
+        {searchBar.isOpen && (
+          <Box
+            w="100%"
+            h="200px"
+          >
+            <Box pos="relative" w="100%">
+              {searchLogic}
+            </Box>
+          </Box>
+        )}
+      </Stack>
+      <HStack align="space-between" spacing="25px">
+        <Filter setFacetId={setFacetId} facetId={facetId} facetValues={formatFacetValues(products?.data.search.facetValues ?? [])} isLoading={isDataLoading} />
+        <Box mx="auto" maxW={{ base: "2xl", lg: "7xl" }} py={{ base: "6", sm: "0" }} px={{ base: "4", sm: "6", lg: "8" }}>
+          <Heading as="h2" my="8">Products</Heading>
+          <SimpleGrid columns={{ base: 1, sm: 2, lg: 3, xl: 4 }} gridGap='20px' pb="25px">
+            {isDataLoading && [...Array(8)].map((e, i) => <Skeleton height='428px' w="277px" boxShadow="xl" key={'skeleton' + i} rounded="lg" />)}
+            {!isDataLoading && products?.data?.search.items.map((item, index) => {
+              return (
+                <Box key={"index" + item && index} w="277px" h="428px">
+                  <ProductItem canHover={canHover} item={item}></ProductItem>
+                </Box>
+              )
+            })}
+          </SimpleGrid>
+          <Pagination site={site} setSite={setSite} totalItems={products?.data.search.totalItems ?? 0}></Pagination>
+        </Box>
+      </HStack>
+    </VStack>
   )
 }
 
