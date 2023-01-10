@@ -16,7 +16,7 @@ const Pagination: React.FC<{ site: number, setSite: (num: number) => void, total
     } else setDisabledNext(false)
 
     setSite(site)
-  }, [site])
+  }, [site, totalItems])
 
   return (
     <HStack justify="center" align="center">
