@@ -8,15 +8,22 @@ const FilterFoldedChecker: React.FC<{
         id: string;
     },
     setFacetId: (id: null | number[]) => void,
-    index: number,
     length: number,
     facetId: null | number[],
     selectedFacets: Array<number>,
     setSelectedFacets: (facetIdArray: Array<number>) => void,
-    refetch: () => void,
-    unFolded: boolean
-}> = ({ item, setFacetId, index, length, selectedFacets: facetIdArray, refetch, setSelectedFacets: setFacetIdArray, facetId, unFolded }) => {
+    unFolded: boolean,
+    index: number,
+    isChecked: boolean | undefined
+}> = ({ item, setFacetId, length, selectedFacets: facetIdArray, setSelectedFacets: setFacetIdArray, facetId, unFolded, index, isChecked: reset }) => {
     const [isChecked, useIsChecked] = useState<boolean>(false)
+    const [click, setClick] = useState<boolean>(false)
+
+    useEffect(() => {
+        if (!reset) {
+            setClick(false)
+        }
+    }, [reset])
 
     useEffect(() => {
         if (isChecked) {
@@ -29,14 +36,13 @@ const FilterFoldedChecker: React.FC<{
                 setFacetId(facetIdArray)
             }
         }
-        refetch()
     }, [isChecked])
 
     return (
         <Box display={unFolded ? "normal" : "none"}>
-            <HStack align="inherit" pb={(index + 1) == length ? "10px" : ""} justify="space-between" fontSize="sm">
+            <HStack align="inherit" justify="space-between" fontSize="sm" pb={(index + 1) == length ? "10px" : ""}>
                 <Text fontWeight="semibold">{formatFirstLetterToUppercase(item.name)}</Text>
-                <Checkbox onChange={() => useIsChecked(!isChecked)} />
+                <Checkbox onChange={() => (setClick(!click), useIsChecked(!isChecked))} isChecked={click ? true : false} />
             </HStack>
         </Box>
     )

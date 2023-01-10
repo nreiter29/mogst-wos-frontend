@@ -5,7 +5,7 @@ import ProductItem from "../compounds/ProductItem";
 import { SearchBar } from "../compounds/SearchBar";
 import { formatHeadlineColor } from "../helper/formatHeadlineColor";
 import { useDebounce } from "../helper/useDebounce";
-import { useFetchData } from "../operations/fetcher";
+import { useFetchData } from "../operations/useFetcherData";
 import { useSearchQuery } from "../operations/useSearchQuery";
 import { CustomLink } from "../utility/CustomLink";
 
@@ -117,6 +117,32 @@ const Home = () => {
     </>
   )
 
+  function formatFacetValues(facetValues: Array<{
+    facetValue: {
+      name: string
+      id: string
+      facet: {
+        name: string
+        id: string
+      }
+    }
+  }>) {
+    const formattedValues: { [key: string]: Array<{ name: string, id: string }> } = {}
+    facetValues.forEach(facetValue => {
+      if (formattedValues[facetValue.facetValue.facet.name]) {
+        formattedValues[facetValue.facetValue.facet.name].push({
+          name: facetValue.facetValue.name, id: facetValue.facetValue.id,
+        })
+      } else {
+        formattedValues[facetValue.facetValue.facet.name] = [{ name: facetValue.facetValue.name, id: facetValue.facetValue.id }]
+      }
+    })
+
+    return formattedValues
+  }
+
+  // console.log(formatFacetValues(products?.data.search.facetValues ?? []))
+
   return (
     <VStack onMouseLeave={() => setCloseSearchResults(true)}>
       <Stack spacing={0} justify="center" align="center" pt="5">
@@ -139,7 +165,7 @@ const Home = () => {
         )}
       </Stack>
       <HStack align="space-between" spacing="25px">
-        <Filter setFacetId={setFacetId} facetId={facetId} />
+        <Filter setFacetId={setFacetId} facetId={facetId} facetValues={formatFacetValues(products?.data.search.facetValues ?? [])} />
         <Box mx="auto" maxW={{ base: "2xl", lg: "7xl" }} py={{ base: "6", sm: "0" }} px={{ base: "4", sm: "6", lg: "8" }}>
           <Heading as="h2" my="8">Products</Heading>
           <SimpleGrid columns={{ base: 1, sm: 2, lg: 3, xl: 4 }} gridGap='20px'>

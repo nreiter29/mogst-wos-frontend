@@ -18,6 +18,16 @@ interface IProductData {
           preview: string
         }
       }>,
+      facetValues: Array<{
+        facetValue: {
+          name: string
+          id: string
+          facet: {
+            name: string
+            id: string
+          }
+        }
+      }>
     }
   }
 }
@@ -63,6 +73,16 @@ export function useFetchData() {
                 preview
               }
             }
+            facetValues {
+              facetValue {
+                name
+                id
+                facet {
+                  name
+                  id
+                }
+              }
+            }
           }
         }
         `
@@ -97,6 +117,16 @@ export function useFetchData() {
               preview
             }
           }
+          facetValues {
+            facetValue {
+              name
+              id
+              facet {
+                name
+                id
+              }
+            }
+          }
         }
       }
       `
@@ -106,7 +136,7 @@ export function useFetchData() {
         setIsLoading(false)
       })
     }
-  }, [refetched, facetId])
+  }, [refetched])
 
   return { data, isLoading, setFacetId, facetId }
 }
