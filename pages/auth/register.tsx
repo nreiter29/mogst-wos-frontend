@@ -1,7 +1,7 @@
-import { Container, Heading, Box, VStack, Card, CardHeader, CardBody, Input, Select, Flex, SimpleGrid, Text, Button, CardFooter, HStack } from "@chakra-ui/react"
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, Container, HStack, Input, Select, SimpleGrid, Text } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
-import { useForm, SubmitHandler } from "react-hook-form"
-import { useRegisterMutation } from "../../operations/useRegisterMutation"
+import { SubmitHandler, useForm } from "react-hook-form"
+import { useRegisterMutation } from "../../operations/mutation/useRegisterMutation"
 import { CustomLink } from "../../utility/CustomLink"
 
 export type RegisterForm = {
@@ -38,7 +38,7 @@ const Register = () => {
         <CardBody>
           {registeredSucessfully ? (
             <Text fontSize="lg">
-              Hey {refetch?.salutation} {refetch?.title} {refetch?.firstName} {refetch?.lastName},
+              Hey {refetch?.salutation} {refetch?.title} {refetch?.lastName},
               <br />
               you have <strong>successfully</strong> registered!
             </Text>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { RegisterForm } from "../pages/auth/register";
+import { RegisterForm } from "../../pages/auth/register";
 
 export function useRegisterMutation() {
   const [refetch, setRefetch] = useState<RegisterForm>()

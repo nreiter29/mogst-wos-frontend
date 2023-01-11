@@ -1,11 +1,6 @@
-import { Box, Button, Divider, Heading, HStack, Skeleton, useToast, VStack } from "@chakra-ui/react"
-import { formatFirstLetterToUppercase } from "../helper/formatFirstLetterToUppercase"
-import { useFacetsQuery } from "../operations/useFacetsQuery"
-import { BiArrowFromLeft, BiArrowFromTop } from "react-icons/bi"
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
-import { CustomLink } from "../utility/CustomLink"
+import { Box, Button, Heading, Skeleton, useToast, VStack } from "@chakra-ui/react"
+import { useEffect, useState } from "react"
 import FilterFolded from "../modules/FilterFolded"
-import { stat } from "fs"
 
 const Filter: React.FC<{
     setFacetId: (

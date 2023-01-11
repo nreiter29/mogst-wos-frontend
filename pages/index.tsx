@@ -1,14 +1,14 @@
 import { Box, Container, Heading, HStack, Image, SimpleGrid, Skeleton, Stack, StackDivider, Text, useDisclosure, useOutsideClick, VStack } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
+import AccountMenu from "../compounds/AccountMenu";
 import Filter from "../compounds/Filter";
 import Pagination from "../compounds/Pagination";
 import ProductItem from "../compounds/ProductItem";
-import AccountMenu from "../compounds/AccountMenu";
 import { SearchBar } from "../compounds/SearchBar";
 import { formatHeadlineColor } from "../helper/formatHeadlineColor";
 import { useDebounce } from "../helper/useDebounce";
-import { useFetchData } from "../operations/useFetcherData";
-import { useSearchQuery } from "../operations/useSearchQuery";
+import { useFetchData } from "../operations/query/useFetcherData";
+import { useSearchQuery } from "../operations/query/useSearchQuery";
 import { CustomLink } from "../utility/CustomLink";
 
 const Home = () => {
