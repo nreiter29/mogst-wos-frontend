@@ -20,7 +20,7 @@ const AccountMenu: React.FC<{}> = () => {
                 <CustomLink href="/auth/login" w="full" _hover={{ textDecor: "none" }}>
                   <Button colorScheme='purple' w="full" rounded="none">Login</Button>
                 </CustomLink>
-                oder
+                or
                 <CustomLink href="/auth/register" w="full" _hover={{ textDecor: "none" }}>
                   <Button colorScheme='gray' w="full" rounded="none">Registration</Button>
                 </CustomLink>
