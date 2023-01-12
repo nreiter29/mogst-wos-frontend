@@ -3,9 +3,7 @@ import { useEffect, useState } from "react"
 import FilterFolded from "../modules/FilterFolded"
 
 const Filter: React.FC<{
-    setFacetId: (
-        id: null | number[]) => void,
-    facetId: null | number[],
+    setFacetNumber: (id: null | number[]) => void,
     facetValues: {
         [key: string]: Array<{
             name: string;
@@ -13,7 +11,7 @@ const Filter: React.FC<{
         }>
     },
     isLoading: boolean
-}> = ({ setFacetId, facetId, facetValues, isLoading }) => {
+}> = ({ setFacetNumber, facetValues, isLoading }) => {
     const [selectedFacets, setSelectedFacets] = useState<number[]>([])
     const [isChecked, setIsChecked] = useState<boolean | undefined>()
     let idx = 0
@@ -33,7 +31,7 @@ const Filter: React.FC<{
                     idx++
                     return (
                         <Box key={"Filter" + facet && index} borderBottom="1px" borderColor="blackAlpha.400">
-                            <FilterFolded setFacetId={setFacetId} facetId={facetId} selectedFacets={selectedFacets} setSelectedFacets={setSelectedFacets} name={facet} facetValues={facetValues} isChecked={isChecked} />
+                            <FilterFolded setFacetNumber={setFacetNumber} selectedFacets={selectedFacets} setSelectedFacets={setSelectedFacets} name={facet} facetValues={facetValues} isChecked={isChecked} />
                         </Box>
                     )
                 })
@@ -41,7 +39,7 @@ const Filter: React.FC<{
             </VStack>
             {isLoading ?
                 <Skeleton w="175px" h="40px" /> :
-                <Button fontSize="lg" onClick={() => (setFacetId([]), toast({
+                <Button fontSize="lg" onClick={() => (setFacetNumber([]), toast({
                     title: "Filter reseted",
                     description: "The filter reseted succesfully.",
                     status: "success",

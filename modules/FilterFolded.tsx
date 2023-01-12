@@ -1,13 +1,12 @@
-import { Heading, HStack, VStack, Text, Box, Checkbox, Divider } from "@chakra-ui/react"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Box, Heading, HStack, VStack } from "@chakra-ui/react"
+import { useState } from "react"
 import { BiArrowFromLeft, BiArrowFromTop } from "react-icons/bi"
 import FilterFoldedChecker from "../elements/FilterFoldedChecker"
 import { formatFirstLetterToUppercase } from "../helper/formatFirstLetterToUppercase"
 import { CustomLink } from "../utility/CustomLink"
 
 const FilterFolded: React.FC<{
-    setFacetId: (id: null | number[]) => void,
-    facetId: null | number[],
+    setFacetNumber: (id: null | number[]) => void,
     selectedFacets: Array<number>,
     setSelectedFacets: (facetIdArray: Array<number>) => void,
     name: string,
@@ -18,7 +17,7 @@ const FilterFolded: React.FC<{
         }>
     },
     isChecked: boolean | undefined
-}> = ({ setFacetId, facetId, selectedFacets: facetIdArray, setSelectedFacets: setSelectedFacets, name, facetValues, isChecked }) => {
+}> = ({ setSelectedFacets, selectedFacets, setFacetNumber, name, facetValues, isChecked }) => {
     const [unFolded, setUnfolded] = useState(false)
 
     return (
@@ -32,7 +31,17 @@ const FilterFolded: React.FC<{
             <Box>
                 {facetValues[name].map((facet, index) => {
                     return (
-                        <FilterFoldedChecker isChecked={isChecked} key={facet && index} unFolded={unFolded} index={index} item={facet} setSelectedFacets={setSelectedFacets} setFacetId={setFacetId} selectedFacets={facetIdArray} length={facetValues[name].length} facetId={facetId}></FilterFoldedChecker>
+                        <FilterFoldedChecker
+                            isChecked={isChecked}
+                            key={facet && index}
+                            unFolded={unFolded}
+                            index={index}
+                            item={facet}
+                            setFacetNumber={setFacetNumber}
+                            setSelectedFacets={setSelectedFacets}
+                            selectedFacets={selectedFacets}
+                            length={facetValues[name].length}
+                        />
                     )
                 })}
             </Box>

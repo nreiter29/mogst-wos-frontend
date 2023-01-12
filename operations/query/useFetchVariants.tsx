@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-interface IProductData {
+interface IVariantsData {
   data: {
     search: {
       totalItems: number
@@ -35,11 +35,11 @@ interface IProductData {
 
 export function useFetchVariants() {
 
-  const [facetId, setFacetId] = useState<null | number[]>(null)
+  const [facetNumber, setFacetNumber] = useState<null | number[]>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [variants, setVariants] = useState<IProductData>()
+  const [variants, setVariants] = useState<IVariantsData>()
   const [refetched, setRefetched] = useState(false)
-  const [site, setSite] = useState<number>(0)
+  const [pageNumber, setPageNumber] = useState<number>(0)
 
   const refetch = () => {
     setRefetched(!refetched)
@@ -47,14 +47,14 @@ export function useFetchVariants() {
 
   useEffect(() => {
     refetch()
-  }, [facetId, site])
+  }, [facetNumber, pageNumber])
 
   useEffect(() => {
-    setSite(0)
-  }, [facetId])
+    setPageNumber(0)
+  }, [facetNumber])
 
   useEffect(() => {
-    if (facetId == null) {
+    if (facetNumber == null) {
       fetch('http://localhost:3001/shop-api', {
         method: 'POST',
         credentials: "include",
@@ -63,7 +63,7 @@ export function useFetchVariants() {
         },
         body: JSON.stringify({
           query: `query Search {
-          search(input: { inStock: true, take: 6, sort: { name: ASC }, skip: ${site * 6}}) {
+          search(input: { inStock: true, take: 6, sort: { name: ASC }, skip: ${pageNumber * 6}}) {
             totalItems
             items {
               sku
@@ -109,7 +109,7 @@ export function useFetchVariants() {
         },
         body: JSON.stringify({
           query: `query Search {
-        search(input: { inStock: true, take: 6, sort: { name: ASC }, facetValueIds: [${facetId}], skip: ${site * 6}}) {
+        search(input: { inStock: true, take: 6, sort: { name: ASC }, facetValueIds: [${facetNumber}], skip: ${pageNumber * 6}}) {
           totalItems
           items {
             sku
@@ -149,5 +149,5 @@ export function useFetchVariants() {
     }
   }, [refetched])
 
-  return { variants, isLoading, setFacetId, facetId, site, setSite }
+  return { variants, isLoading, setFacetNumber, pageNumber, setPageNumber }
 }

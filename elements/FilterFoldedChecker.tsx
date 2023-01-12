@@ -7,15 +7,14 @@ const FilterFoldedChecker: React.FC<{
         name: string;
         id: string;
     },
-    setFacetId: (id: null | number[]) => void,
+    setFacetNumber: (id: null | number[]) => void,
     length: number,
-    facetId: null | number[],
     selectedFacets: Array<number>,
     setSelectedFacets: (facetIdArray: Array<number>) => void,
     unFolded: boolean,
     index: number,
     isChecked: boolean | undefined
-}> = ({ item, setFacetId, length, selectedFacets: facetIdArray, setSelectedFacets: setFacetIdArray, facetId, unFolded, index, isChecked: reset }) => {
+}> = ({ item, setFacetNumber, length, selectedFacets, setSelectedFacets, unFolded, index, isChecked: reset }) => {
     const [isChecked, useIsChecked] = useState<boolean>(false)
     const [click, setClick] = useState<boolean>(false)
 
@@ -27,13 +26,13 @@ const FilterFoldedChecker: React.FC<{
 
     useEffect(() => {
         if (isChecked) {
-            setFacetIdArray(facetIdArray.concat(Number(item.id)))
-            setFacetId(facetIdArray.concat(Number(item.id)))
+            setSelectedFacets(selectedFacets.concat(Number(item.id)))
+            setFacetNumber(selectedFacets.concat(Number(item.id)))
         } else if (!isChecked) {
-            if (facetIdArray.length != 0) {
-                const idx = facetIdArray.indexOf(Number(item.id))
-                facetIdArray.splice(idx, 1)
-                setFacetId(facetIdArray)
+            if (selectedFacets.length != 0) {
+                const idx = selectedFacets.indexOf(Number(item.id))
+                selectedFacets.splice(idx, 1)
+                setFacetNumber(selectedFacets)
             }
         }
     }, [isChecked])
