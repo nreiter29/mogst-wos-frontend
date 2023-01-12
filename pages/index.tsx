@@ -17,8 +17,9 @@ const Home = () => {
 
   return (
     <Container maxW="container.xl">
-      <VStack onMouseLeave={() => setCloseSearchResults(true)} spacing="0">
-        <AccountMenu></AccountMenu>
+      {/* TODO: Create own Navbar component and add it to app.tsx */}
+      <VStack spacing="0">
+        <AccountMenu />
         <Stack justify="center" align="center" pos="absolute" top="5">
           <Box w={{ lg: '200px', xl: '350px' }} >
             <SearchLogic setCanHover={setCanHover} closeSearchResults={closeSearchResults} setCloseSearchResults={setCloseSearchResults} />
@@ -33,6 +34,7 @@ const Home = () => {
           )}
         </Stack>
         <HStack align="start" justify="space-between" w="full">
+          {/* TODO: sauberer Aufbau vom Content im Gridsystem */}
           <Filter setFacetNumber={setFacetNumber} facetValues={formatFacetValues(variants?.data.search.facetValues ?? [])} isLoading={areVariantsLoading} />
           <Box mx="auto" maxW={{ base: "2xl", lg: "7xl" }} py={{ base: "6", sm: "0" }} pl={{ base: "4", sm: "6", lg: "8" }}>
             <Heading as="h2" my="8">Variants</Heading>
