@@ -57,6 +57,7 @@ export function useFetchData() {
     if (facetId == null) {
       fetch('http://localhost:3001/shop-api', {
         method: 'POST',
+        credentials: "include",
         headers: {
           'Content-Type': 'application/json',
         },
@@ -102,6 +103,7 @@ export function useFetchData() {
     } else {
       fetch('http://localhost:3001/shop-api', {
         method: 'POST',
+        credentials: "include",
         headers: {
           'Content-Type': 'application/json',
         },

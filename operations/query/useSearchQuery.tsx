@@ -35,6 +35,7 @@ export function useSearchQuery(input: string) {
     useEffect(() => {
         fetch('http://localhost:3001/shop-api', {
             method: 'POST',
+            credentials: "include",
             headers: {
                 'Content-Type': 'application/json',
             },

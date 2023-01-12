@@ -1,8 +1,14 @@
-import { Box, HStack, Popover, PopoverTrigger, IconButton, Portal, PopoverContent, PopoverArrow, PopoverHeader, PopoverCloseButton, PopoverBody, Button } from "@chakra-ui/react"
+import { Box, Button, HStack, IconButton, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Portal, Text, VStack } from "@chakra-ui/react"
 import { RxAvatar } from "react-icons/rx"
+import { useActiveCustomerQuery } from "../operations/query/useActiveCustomerQuery"
+import { useLogoutMutation } from "../operations/query/useLogoutMutation"
 import { CustomLink } from "../utility/CustomLink"
 
-const AccountMenu: React.FC<{}> = () => {
+const AccountMenu = () => {
+  const { activeCustomerData, refetch } = useActiveCustomerQuery()
+  const logout = useLogoutMutation()
+
+
   return (
     <HStack justify="space-between" w="100%" mt="5">
       <Box w="1px" h="1px"></Box>
@@ -17,13 +23,24 @@ const AccountMenu: React.FC<{}> = () => {
               <PopoverHeader>Account</PopoverHeader>
               <PopoverCloseButton />
               <PopoverBody display="flex" flexDir="column" justifyContent="center" alignItems="center">
-                <CustomLink href="/auth/login" w="full" _hover={{ textDecor: "none" }}>
-                  <Button colorScheme='purple' w="full" rounded="none">Login</Button>
-                </CustomLink>
-                or
-                <CustomLink href="/auth/register" w="full" _hover={{ textDecor: "none" }}>
-                  <Button colorScheme='gray' w="full" rounded="none">Registration</Button>
-                </CustomLink>
+                {activeCustomerData?.data?.activeCustomer ? (
+                  <VStack>
+                    <Text fontSize="lg">
+                      Hey {activeCustomerData?.data?.activeCustomer?.customFields.salutation} {activeCustomerData?.data?.activeCustomer?.title} {activeCustomerData?.data?.activeCustomer?.lastName}, you are logged in!
+                    </Text>
+                    <Button colorScheme="red" onClick={async () => { await logout(); refetch() }}>Logout</Button>
+                  </VStack>
+                ) : (
+                  <>
+                    <CustomLink href="/auth/login" w="full" _hover={{ textDecor: "none" }}>
+                      <Button colorScheme='purple' w="full" rounded="none">Login</Button>
+                    </CustomLink>
+                    or
+                    <CustomLink href="/auth/register" w="full" _hover={{ textDecor: "none" }}>
+                      <Button colorScheme='gray' w="full" rounded="none">Registration</Button>
+                    </CustomLink>
+                  </>
+                )}
               </PopoverBody>
             </PopoverContent>
           </Portal>

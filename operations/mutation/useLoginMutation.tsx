@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { LoginForm } from "../../pages/auth/login";
+import { ILoginForm } from "../../pages/auth/login";
 
 export function useLoginMutation() {
-  const [refetch, setRefetch] = useState<LoginForm>()
+  const [refetch, setRefetch] = useState<ILoginForm>()
   const [loginSuccesfully, setLoginSuccesfully] = useState<boolean>(false)
   const [isLoginDataFalse, setIsLoginDataFalse] = useState<boolean>(false)
 
@@ -10,6 +10,7 @@ export function useLoginMutation() {
     if (refetch) {
       fetch('http://localhost:3001/shop-api', {
         method: 'POST',
+        credentials: "include",
         headers: {
           'Content-Type': 'application/json',
         },
@@ -42,13 +43,13 @@ export function useLoginMutation() {
                 __typename
               }
             }
-          }        
+          }
         `
         })
       }).then(res => res.json()).then(res => {
         if (res.data.login.__typename == "InvalidCredentialsError") {
           setIsLoginDataFalse(true)
-        } else if (!isLoginDataFalse && res.data.login.__typename == "CurrentUser") {
+        } else if (res.data.login.__typename == "CurrentUser") {
           setLoginSuccesfully(true)
         }
       })

@@ -2,18 +2,26 @@ import { Container, Heading, Box, VStack, Card, CardHeader, CardBody, Input, Sel
 import { useEffect, useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { useLoginMutation } from "../../operations/mutation/useLoginMutation"
+import { useActiveCustomerQuery } from "../../operations/query/useActiveCustomerQuery"
 import { CustomLink } from "../../utility/CustomLink"
 
-export type LoginForm = {
+export interface ILoginForm {
   emailAddress: string
   password: string
   rememberMe: boolean
 }
 
 const Register = () => {
-  const { register, handleSubmit } = useForm<LoginForm>()
-  const onSubmit: SubmitHandler<LoginForm> = data => setRefetch(data)
+  const { register, handleSubmit } = useForm<ILoginForm>()
   const { setRefetch, loginSuccesfully, isLoginDataFalse } = useLoginMutation()
+  const { activeCustomerData, refetch } = useActiveCustomerQuery()
+  const onSubmit: SubmitHandler<ILoginForm> = data => setRefetch(data)
+
+  useEffect(() => {
+    if (loginSuccesfully) {
+      refetch()
+    }
+  }, [loginSuccesfully])
 
   return (
     <Container maxW="container.xl" h="100vh" display="flex" alignItems="center">
@@ -24,7 +32,9 @@ const Register = () => {
         <CardBody>
           {loginSuccesfully ? (
             <Text fontSize="lg">
-              You have <strong>successfully</strong> logged in!
+              Hey {activeCustomerData?.data?.activeCustomer?.customFields.salutation} {activeCustomerData?.data?.activeCustomer?.title} {activeCustomerData?.data?.activeCustomer?.lastName},
+              <br />
+              you have <strong>successfully</strong> logged in!
             </Text>
           ) : (
             <form onSubmit={handleSubmit(onSubmit)}>
