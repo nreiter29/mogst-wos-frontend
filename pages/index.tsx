@@ -28,9 +28,7 @@ const Home = () => {
               w="100%"
               h="200px"
             >
-              <Box pos="relative" w="100%">
-                <SearchLogic setCanHover={setCanHover} closeSearchResults={closeSearchResults} setCloseSearchResults={setCloseSearchResults} />
-              </Box>
+              <SearchLogic setCanHover={setCanHover} closeSearchResults={closeSearchResults} setCloseSearchResults={setCloseSearchResults} />
             </Box>
           )}
         </Stack>
