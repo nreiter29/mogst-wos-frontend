@@ -36,7 +36,7 @@ interface IVariantsData {
 export function useFetchVariants() {
 
   const [facetNumber, setFacetNumber] = useState<null | number[]>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [areVariantsLoading, setAreVariantsLoading] = useState(true)
   const [variants, setVariants] = useState<IVariantsData>()
   const [refetched, setRefetched] = useState(false)
   const [pageNumber, setPageNumber] = useState<number>(0)
@@ -98,7 +98,7 @@ export function useFetchVariants() {
         })
       }).then(res => res.json()).then(res => {
         setVariants(res)
-        setIsLoading(false)
+        setAreVariantsLoading(false)
       })
     } else {
       fetch('http://localhost:3001/shop-api', {
@@ -144,10 +144,10 @@ export function useFetchVariants() {
         })
       }).then(res => res.json()).then(res => {
         setVariants(res)
-        setIsLoading(false)
+        setAreVariantsLoading(false)
       })
     }
   }, [refetched])
 
-  return { variants, isLoading, setFacetNumber, pageNumber, setPageNumber }
+  return { variants, areVariantsLoading, setFacetNumber, pageNumber, setPageNumber }
 }
