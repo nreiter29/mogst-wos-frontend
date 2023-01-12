@@ -6,11 +6,11 @@ import Pagination from "../compounds/Pagination";
 import ProductItem from "../compounds/ProductItem";
 import SearchLogic from "../compounds/SearchLogic";
 import { formatFacetValues } from "../helper/formatFacetValues";
-import { useFetchData } from "../operations/query/useFetcherData";
+import { useFetchVariants } from "../operations/query/useFetchVariants";
 
 const Home = () => {
 
-  const { data: products, isLoading: isDataLoading, setFacetId, facetId, site, setSite } = useFetchData()
+  const { variants, isLoading: isDataLoading, setFacetId, facetId, site, setSite } = useFetchVariants()
   const [canHover, setCanHover] = useState<boolean>(true)
   const [closeSearchResults, setCloseSearchResults] = useState(true)
   const searchBar = useDisclosure()
@@ -39,12 +39,12 @@ const Home = () => {
           )}
         </Stack>
         <HStack align="start" justify="space-between" w="full">
-          <Filter setFacetId={setFacetId} facetId={facetId} facetValues={formatFacetValues(products?.data.search.facetValues ?? [])} isLoading={isDataLoading} />
+          <Filter setFacetId={setFacetId} facetId={facetId} facetValues={formatFacetValues(variants?.data.search.facetValues ?? [])} isLoading={isDataLoading} />
           <Box mx="auto" maxW={{ base: "2xl", lg: "7xl" }} py={{ base: "6", sm: "0" }} pl={{ base: "4", sm: "6", lg: "8" }}>
             <Heading as="h2" my="8">Products</Heading>
             <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} gridGap='20px' mb="35px">
               {isDataLoading && [...Array(6)].map((e, i) => <Skeleton height='428px' w="277px" boxShadow="xl" key={'skeleton' + i} rounded="lg" />)}
-              {!isDataLoading && products?.data?.search.items.map((item, index) => {
+              {!isDataLoading && variants?.data?.search.items.map((item, index) => {
                 return (
                   <Box key={"index" + item && index} w="277px" h="428px">
                     <ProductItem canHover={canHover} item={item}></ProductItem>
@@ -52,7 +52,7 @@ const Home = () => {
                 )
               })}
             </SimpleGrid>
-            <Pagination site={site} setSite={setSite} totalItems={products?.data.search.totalItems ?? 0} isLoading={isDataLoading}></Pagination>
+            <Pagination site={site} setSite={setSite} totalItems={variants?.data.search.totalItems ?? 0} isLoading={isDataLoading}></Pagination>
           </Box>
         </HStack>
       </VStack>

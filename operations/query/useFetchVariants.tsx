@@ -33,10 +33,11 @@ interface IProductData {
   }
 }
 
-export function useFetchData() {
+export function useFetchVariants() {
+
   const [facetId, setFacetId] = useState<null | number[]>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [data, setData] = useState<IProductData>()
+  const [variants, setVariants] = useState<IProductData>()
   const [refetched, setRefetched] = useState(false)
   const [site, setSite] = useState<number>(0)
 
@@ -52,7 +53,6 @@ export function useFetchData() {
     setSite(0)
   }, [facetId])
 
-  // TODO: if else 
   useEffect(() => {
     if (facetId == null) {
       fetch('http://localhost:3001/shop-api', {
@@ -97,7 +97,7 @@ export function useFetchData() {
         `
         })
       }).then(res => res.json()).then(res => {
-        setData(res)
+        setVariants(res)
         setIsLoading(false)
       })
     } else {
@@ -143,11 +143,11 @@ export function useFetchData() {
       `
         })
       }).then(res => res.json()).then(res => {
-        setData(res)
+        setVariants(res)
         setIsLoading(false)
       })
     }
   }, [refetched])
 
-  return { data, isLoading, setFacetId, facetId, site, setSite }
+  return { variants, isLoading, setFacetId, facetId, site, setSite }
 }
