@@ -32,7 +32,6 @@ const SearchLogic: React.FC<{
   return (
     <>
       <SearchBar
-        zIndex={1000}
         isLoading={isLoading ? false : isLoading}
         borderBottomRadius={(!closeSearchResults) ? 0 : 20}
         w="inherit"
@@ -69,7 +68,8 @@ const SearchLogic: React.FC<{
                 >
                   <CustomLink href={`/product/${item.slug}?sku=${item.sku}`} onClick={() => setSearchInput('')} _hover={{ textDecor: "none" }}>
                     <HStack spacing="2">
-                      <Image h="75px"
+                      <Image
+                        h="75px"
                         w="75px"
                         objectFit="cover"
                         objectPosition="center"
