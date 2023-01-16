@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 export interface ISearchQuery {
     data: {
@@ -28,9 +28,9 @@ export function useSearchQuery(input: string) {
     const [data, setData] = useState<ISearchQuery | undefined>()
     const [refetched, setRefetched] = useState(false)
 
-    const refetch = () => {
+    const refetch = useCallback(() => {
         setRefetched(!refetched)
-    }
+    }, [refetched])
 
     useEffect(() => {
         fetch('http://localhost:3001/shop-api', {

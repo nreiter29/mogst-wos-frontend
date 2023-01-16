@@ -26,7 +26,7 @@ const ProductItem: React.FC<IProductItem> = ({ canHover, item }) => {
     const [hover, setHover] = useState(false)
 
     return (
-        <CustomLink href="/" _hover={{ textDecor: "none" }}>
+        <CustomLink href={`/product/${item.slug}?sku=${item.sku}`} _hover={{ textDecor: "none" }}>
             <Box _hover={{ backgroundColor: canHover && "#eeeeee", p: canHover && "0" }} onMouseEnter={() => canHover && setHover(true)} onMouseLeave={() => canHover && setHover(false)} transition=".5s" boxShadow="xl" rounded="lg" p="3" h="440px">
                 <Box height="380px">
                     <Image

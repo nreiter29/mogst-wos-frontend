@@ -5,11 +5,10 @@ import { useDebounce } from "../helper/useDebounce";
 import { useSearchQuery } from "../operations/query/useSearchQuery";
 import { CustomLink } from "../utility/CustomLink";
 
-const SearchLogic: React.FC<{
+const Search: React.FC<{
   setCloseSearchResults: (v: boolean) => void,
   closeSearchResults: boolean,
-  setCanHover: (v: boolean) => void,
-}> = ({ setCloseSearchResults, closeSearchResults, setCanHover }) => {
+}> = ({ setCloseSearchResults, closeSearchResults, }) => {
 
   const [searchInput, setSearchInput] = useState('')
   const debouncedSearchInput = useDebounce(searchInput, 500)
@@ -20,7 +19,7 @@ const SearchLogic: React.FC<{
     if (debouncedSearchInput.length > 2 && data?.data.search.items.length != 0) {
       refetch()
     }
-  }, [debouncedSearchInput.length, refetch])
+  }, [debouncedSearchInput.length])
 
   const ref = useRef(null)
   useOutsideClick({
@@ -57,7 +56,6 @@ const SearchLogic: React.FC<{
           ref={ref}
         >
           {data?.data.search?.items.map((item, index) => {
-            setCanHover(false)
             return (
               <Skeleton isLoaded={!isLoading} key={"Searchbar" + item.sku + index}>
                 <Box
@@ -113,4 +111,4 @@ const SearchLogic: React.FC<{
   )
 }
 
-export default SearchLogic
+export default Search

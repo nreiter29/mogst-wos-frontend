@@ -4,7 +4,7 @@ import AccountMenu from "../compounds/AccountMenu";
 import Filter from "../compounds/Filter";
 import Pagination from "../compounds/Pagination";
 import ProductItem from "../compounds/ProductItem";
-import SearchLogic from "../compounds/SearchLogic";
+import Search from "../compounds/Search";
 import { formatFacetValues } from "../helper/formatFacetValues";
 import { useFetchVariants } from "../operations/query/useFetchVariants";
 
@@ -13,7 +13,6 @@ const Home = () => {
   const { variants, areVariantsLoading, setFacetNumber, pageNumber, setPageNumber } = useFetchVariants()
   const [canHover, setCanHover] = useState<boolean>(true)
   const [closeSearchResults, setCloseSearchResults] = useState(true)
-  const searchBar = useDisclosure()
 
   return (
     <Container maxW="container.xl">
@@ -22,17 +21,9 @@ const Home = () => {
         <AccountMenu />
         <Stack justify="center" align="center" pos="absolute" top="5">
           <Box w={{ lg: '200px', xl: '350px' }} >
-            <SearchLogic setCanHover={setCanHover} closeSearchResults={closeSearchResults} setCloseSearchResults={setCloseSearchResults} />
+            <Search closeSearchResults={closeSearchResults} setCloseSearchResults={setCloseSearchResults} />
           </Box>
-          {searchBar.isOpen && (
-            <Box
-              w="100%"
-              h="200px"
-            >
-              <SearchLogic setCanHover={setCanHover} closeSearchResults={closeSearchResults} setCloseSearchResults={setCloseSearchResults} />
-            </Box>
-          )}
-        </Stack>
+        </Stack> */
         <HStack align="start" justify="space-between" w="full">
           {/* TODO: sauberer Aufbau vom Content im Gridsystem */}
           <Filter setFacetNumber={setFacetNumber} facetValues={formatFacetValues(variants?.data.search.facetValues ?? [])} isLoading={areVariantsLoading} />
@@ -43,7 +34,7 @@ const Home = () => {
               {!areVariantsLoading && variants?.data?.search.items.map((item, index) => {
                 return (
                   <Box key={"index" + item && index} w="277px" h="428px">
-                    <ProductItem canHover={canHover} item={item}></ProductItem>
+                    <ProductItem canHover={closeSearchResults} item={item}></ProductItem>
                   </Box>
                 )
               })}

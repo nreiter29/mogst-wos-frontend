@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 
 export interface IProductsSlug {
   name: string
+  description: string
   variants: Array<{
     sku: string
     name: string
@@ -33,12 +34,13 @@ export function useProductQuery(slug: string) {
       body: JSON.stringify({
         query: `query Product {
           product(slug: "${slug}") {
+            description
             name
             variants {
               sku
               name
               stockLevel
-              priceWithTax 
+              priceWithTax
               assets {
                 name
                 source
@@ -46,7 +48,6 @@ export function useProductQuery(slug: string) {
             }
           }
         }
-        
 `
       })
     }).then(res => res.json()).then(res => (setProducts(res.data.product), setIsLoading(false)))
