@@ -26,7 +26,7 @@ const Register = () => {
   return (
     <Container maxW="container.xl" h="95vh" display="flex" alignItems="center">
       <Card w="100%">
-        <CardHeader fontSize="xx-large" fontWeight="bold">
+        <CardHeader>
           <Heading as="h2" fontSize="4xl">
             Login
           </Heading>

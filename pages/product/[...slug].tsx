@@ -63,7 +63,7 @@ const ProductPage = () => {
   return (
     <Container maxW="container.xl" h="95vh" display="flex" alignItems="center">
       <Card w="100%">
-        <CardHeader fontSize="2xl" fontWeight="bold" w="fit-content">
+        <CardHeader w="fit-content">
           <Skeleton isLoaded={!isLoading} h="36px" w="180px">
             <Heading fontSize="4xl" whiteSpace="nowrap">
               {products?.name}
@@ -88,9 +88,9 @@ const ProductPage = () => {
             <VStack w="full" align="left" spacing="0">
               <Skeleton isLoaded={!isLoading} h="30px" w="full" mb="10px">
                 <Flex align="center" justify="space-between" w="full" mb="10px">
-                  <Heading fontSize="xl" fontWeight="bold">{products?.name}</Heading>
+                  <Heading fontSize="xl">{products?.name}</Heading>
                   {product?.priceWithTax && (
-                    <Text fontSize="xl" fontWeight="bold">
+                    <Text fontSize="xl">
                       <FormattedNumber
                         value={+product?.priceWithTax / 100}
                         style="currency"

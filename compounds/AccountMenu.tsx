@@ -20,7 +20,7 @@ const AccountMenu = () => {
           <Portal>
             <PopoverContent>
               <PopoverArrow />
-              <PopoverHeader>Account</PopoverHeader>
+              <PopoverHeader><Heading as="h3" fontSize="lg">Account</Heading></PopoverHeader>
               <PopoverCloseButton />
               <PopoverBody display="flex" flexDir="column" justifyContent="center" alignItems="center">
                 {activeCustomerData?.data?.activeCustomer ? (

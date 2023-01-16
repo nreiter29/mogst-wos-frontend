@@ -1,4 +1,4 @@
-import { Box, HStack, Image, Skeleton, Stack, StackDivider, Text, useOutsideClick, VStack } from "@chakra-ui/react";
+import { Box, Heading, HStack, Image, Skeleton, Stack, StackDivider, Text, useOutsideClick, VStack } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { SearchBar } from "../modules/SearchBar";
 import { useDebounce } from "../helper/useDebounce";
@@ -75,9 +75,9 @@ const Search: React.FC<{
                         src={item.productVariantAsset?.preview ?? "https://images.unsplash.com/photo-1661006670127-b560e732ce28?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"}
                         alt={item.productVariantName ?? "Standard Picture"} />
                       <VStack spacing="0" align="flex-start">
-                        <Text fontWeight="bold" _hover={{ color: 'accent.500' }} transition="0.25s">
+                        <Heading _hover={{ color: 'accent.500' }} transition="0.25s" fontSize="md">
                           {item.productVariantName}
-                        </Text>
+                        </Heading>
                         <Text color="gray">
                           Artikelnummer: {item.sku}
                         </Text>
@@ -102,9 +102,9 @@ const Search: React.FC<{
             w="inherit"
             padding="15px"
           >
-            <Text fontWeight="bold">
+            <Heading as="h4" fontSize="md">
               No results found
-            </Text>
+            </Heading>
           </Box>
         )
       }

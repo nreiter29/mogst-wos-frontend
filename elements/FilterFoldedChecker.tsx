@@ -1,4 +1,4 @@
-import { HStack, Text, Checkbox, Box } from "@chakra-ui/react"
+import { HStack, Text, Checkbox, Box, Heading } from "@chakra-ui/react"
 import { useEffect, useState } from "react";
 import { formatFirstLetterToUppercase } from "../helper/formatFirstLetterToUppercase";
 
@@ -40,7 +40,7 @@ const FilterFoldedChecker: React.FC<{
     return (
         <Box display={unFolded ? "normal" : "none"}>
             <HStack align="inherit" justify="space-between" fontSize="sm" pb={(index + 1) == length ? "10px" : ""}>
-                <Text fontWeight="semibold">{formatFirstLetterToUppercase(item.name)}</Text>
+                <Heading as="h5" fontSize="sm">{formatFirstLetterToUppercase(item.name)}</Heading>
                 <Checkbox onChange={() => (setClick(!click), useIsChecked(!isChecked))} isChecked={click ? true : false} />
             </HStack>
         </Box>

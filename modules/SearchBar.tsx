@@ -32,7 +32,6 @@ export const SearchBar: React.FC<ICombined> = ({
                 w="100%"
                 backgroundColor={colorBackground}
                 fontSize="md"
-                fontWeight="medium"
                 color={colorText}
                 placeholder="Search Products"
                 type="search"
