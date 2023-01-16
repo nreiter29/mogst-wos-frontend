@@ -50,6 +50,7 @@ export const SearchBar: React.FC<ICombined> = ({
                     outlineColor: colorAccent,
                 }}
                 {...inputProps}
+                mr="1"
             />
             <InputRightElement>
                 <IconButton

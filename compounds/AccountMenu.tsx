@@ -8,7 +8,6 @@ const AccountMenu = () => {
   const { activeCustomerData, refetch } = useActiveCustomerQuery()
   const logout = useLogoutMutation()
 
-
   return (
     <HStack justify="space-between" w="100%" mt="5">
       <Box w="1px" h="1px"></Box>

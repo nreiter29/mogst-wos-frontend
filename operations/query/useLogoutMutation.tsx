@@ -35,7 +35,6 @@ export function useLogoutMutation() {
         `
         })
       }).then(res => res.json()).then(res => {
-        console.log(res)
         setLogoutBoolean(false)
         toast({
           title: "Successfully",

@@ -41,8 +41,8 @@ export function useActiveCustomerQuery() {
           }
         `
       })
-    }).then(res => res.json()).then(res => setActiveCustomerData(res))
-  }, [refetched])
+    }).then(res => res.json()).then(res => setActiveCustomerData(res)).catch(err => console.log(err))
+  }, [refetched, activeCustomerData])
 
   return { activeCustomerData, refetch }
 }

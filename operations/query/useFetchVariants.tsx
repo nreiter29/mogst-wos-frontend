@@ -99,7 +99,7 @@ export function useFetchVariants() {
       }).then(res => res.json()).then(res => {
         setVariants(res)
         setAreVariantsLoading(false)
-      })
+      }).catch(err => console.log(err))
     } else {
       fetch('http://localhost:3001/shop-api', {
         method: 'POST',
@@ -145,7 +145,7 @@ export function useFetchVariants() {
       }).then(res => res.json()).then(res => {
         setVariants(res)
         setAreVariantsLoading(false)
-      })
+      }).catch(err => console.log(err))
     }
   }, [refetched])
 

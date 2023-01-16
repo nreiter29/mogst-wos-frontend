@@ -66,7 +66,7 @@ export function useSearchQuery(input: string) {
         }).then(res => res.json()).then(res => {
             setData(res)
             setIsLoading(false)
-        })
+        }).catch(err => console.log(err))
     }, [refetched, input])
 
     return { data, isLoading, refetch }

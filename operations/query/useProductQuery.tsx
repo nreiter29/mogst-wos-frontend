@@ -50,7 +50,7 @@ export function useProductQuery(slug: string) {
         }
 `
       })
-    }).then(res => res.json()).then(res => (setProducts(res.data.product), setIsLoading(false)))
+    }).then(res => res.json()).then(res => (setProducts(res.data.product), setIsLoading(false))).catch(err => console.log(err))
   }, [refetchBoolean])
 
   return { products, refetch, isLoading }
