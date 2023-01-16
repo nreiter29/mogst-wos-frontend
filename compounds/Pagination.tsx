@@ -1,4 +1,4 @@
-import { Button, HStack, Skeleton, StackItem, Text } from "@chakra-ui/react"
+import { Button, HStack, Skeleton, Text } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai"
 

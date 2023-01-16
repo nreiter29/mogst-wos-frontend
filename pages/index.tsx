@@ -1,10 +1,7 @@
-import { Box, Container, Heading, HStack, SimpleGrid, Skeleton, Stack, useDisclosure, VStack } from "@chakra-ui/react";
-import { useState } from "react";
-import AccountMenu from "../compounds/AccountMenu";
+import { Box, Container, Heading, HStack, SimpleGrid, Skeleton } from "@chakra-ui/react";
 import Filter from "../compounds/Filter";
 import Pagination from "../compounds/Pagination";
 import ProductItem from "../compounds/ProductItem";
-import Search from "../compounds/Search";
 import { formatFacetValues } from "../helper/formatFacetValues";
 import { useFetchVariants } from "../operations/query/useFetchVariants";
 

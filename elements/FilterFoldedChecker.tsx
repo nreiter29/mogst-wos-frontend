@@ -1,4 +1,4 @@
-import { HStack, Text, Checkbox, Box, Heading } from "@chakra-ui/react"
+import { Box, Checkbox, Heading, HStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { formatFirstLetterToUppercase } from "../helper/formatFirstLetterToUppercase";
 

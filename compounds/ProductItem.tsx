@@ -1,5 +1,4 @@
-import { Box, Link, Image, HStack, Heading, Text, textDecoration, Skeleton } from "@chakra-ui/react"
-import { useState } from "react"
+import { Box, Heading, HStack, Image } from "@chakra-ui/react"
 import { FormattedNumber } from "react-intl"
 import { CustomLink } from "../utility/CustomLink"
 
