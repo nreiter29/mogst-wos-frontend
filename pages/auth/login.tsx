@@ -24,10 +24,12 @@ const Register = () => {
   }, [loginSuccesfully])
 
   return (
-    <Container maxW="container.xl" h="100vh" display="flex" alignItems="center">
+    <Container maxW="container.xl" h="95vh" display="flex" alignItems="center">
       <Card w="100%">
         <CardHeader fontSize="xx-large" fontWeight="bold">
-          Login
+          <Heading as="h2" fontSize="4xl">
+            Login
+          </Heading>
         </CardHeader>
         <CardBody>
           {loginSuccesfully ? (
@@ -40,11 +42,11 @@ const Register = () => {
             <form onSubmit={handleSubmit(onSubmit)}>
               <SimpleGrid columns={{ base: 1, md: 2 }} spacing="2">
                 <Box>
-                  E-Mail *
+                  <Text>E-Mail *</Text>
                   <Input type="email" isRequired {...register("emailAddress", { required: true })} />
                 </Box>
                 <Box>
-                  Password *
+                  <Text>Password *</Text>
                   <Input type="password" isRequired {...register("password", { required: true })} />
                 </Box>
               </SimpleGrid>

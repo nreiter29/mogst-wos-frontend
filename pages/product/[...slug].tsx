@@ -1,5 +1,5 @@
 import { useRouter } from "next/router"
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, Container, Flex, Image, Select, SimpleGrid, Skeleton, Text, VStack } from "@chakra-ui/react"
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, Container, Flex, Heading, Image, Select, SimpleGrid, Skeleton, Text, VStack } from "@chakra-ui/react"
 import { NextPage } from "next"
 import { IProductsSlug, useProductQuery } from "../../operations/query/useProductQuery"
 import { useEffect, useState } from "react"
@@ -61,11 +61,13 @@ const ProductPage = () => {
   }, [isLoading, products])
 
   return (
-    <Container maxW="container.xl" h="100vh" display="flex" alignItems="center">
-      <Card w="90%">
+    <Container maxW="container.xl" h="95vh" display="flex" alignItems="center">
+      <Card w="100%">
         <CardHeader fontSize="2xl" fontWeight="bold" w="fit-content">
           <Skeleton isLoaded={!isLoading} h="36px" w="180px">
-            {products?.name}
+            <Heading fontSize="4xl" whiteSpace="nowrap">
+              {products?.name}
+            </Heading>
           </Skeleton>
         </CardHeader>
         <CardBody display="flex" alignContent="center" justifyContent="space-between">
@@ -86,7 +88,7 @@ const ProductPage = () => {
             <VStack w="full" align="left" spacing="0">
               <Skeleton isLoaded={!isLoading} h="30px" w="full" mb="10px">
                 <Flex align="center" justify="space-between" w="full" mb="10px">
-                  <Text fontSize="xl" fontWeight="bold">{products?.name}</Text>
+                  <Heading fontSize="xl" fontWeight="bold">{products?.name}</Heading>
                   {product?.priceWithTax && (
                     <Text fontSize="xl" fontWeight="bold">
                       <FormattedNumber
@@ -111,7 +113,7 @@ const ProductPage = () => {
                 )}
               </Box>
               <Button as="div" colorScheme="purple" w="full" mb="25px">Add to shopping cart</Button>
-              <Text fontWeight="bold" pt="25px">Description</Text>
+              <Heading as="h3" fontSize="lg" pt="25px">Description</Heading>
               <Text>{products?.description}</Text>
             </VStack>
           </SimpleGrid>
@@ -123,8 +125,8 @@ const ProductPage = () => {
             </CustomLink>
           </Skeleton>
         </CardFooter>
-      </Card>
-    </Container>
+      </Card >
+    </Container >
   )
 }
 

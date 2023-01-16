@@ -54,6 +54,7 @@ const Search: React.FC<{
           maxH="500px"
           overflowY="auto"
           ref={ref}
+          zIndex={1}
         >
           {data?.data.search?.items.map((item, index) => {
             return (

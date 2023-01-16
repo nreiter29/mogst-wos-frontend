@@ -23,11 +23,9 @@ export interface IProductItem {
 }
 
 const ProductItem: React.FC<IProductItem> = ({ canHover, item }) => {
-    const [hover, setHover] = useState(false)
-
     return (
         <CustomLink href={`/product/${item.slug}?sku=${item.sku}`} _hover={{ textDecor: "none" }}>
-            <Box _hover={{ backgroundColor: canHover && "#eeeeee", p: canHover && "0" }} onMouseEnter={() => canHover && setHover(true)} onMouseLeave={() => canHover && setHover(false)} transition=".5s" boxShadow="xl" rounded="lg" p="3" h="440px">
+            <Box _hover={{ backgroundColor: canHover && "hoverItem.500" }} transition=".5s" boxShadow="xl" rounded="lg" h="440px">
                 <Box height="380px">
                     <Image
                         rounded="lg"
@@ -37,10 +35,13 @@ const ProductItem: React.FC<IProductItem> = ({ canHover, item }) => {
                         w="full"
                         objectFit="cover"
                         objectPosition="center"
+                        p="3"
+                        transition=".5s"
+                        _hover={{ p: canHover && "0" }}
                     />
                 </Box>
-                <HStack justify="space-between" align="center" fontSize={hover ? "md" : "sm"} p="1" my={hover ? "10px" : ""} transition=".5s" spacing="0" columnGap={"2"}>
-                    <Heading as="h3" fontSize={hover ? "md" : "sm"}>{item.productVariantName}</Heading>
+                <HStack justify="space-between" align="center" fontSize="sm" p="1" spacing="0" mx="3">
+                    <Heading as="h3" fontSize="sm" mr="2">{item.productVariantName}</Heading>
                     <FormattedNumber
                         value={+item.priceWithTax.value / 100}
                         style="currency"

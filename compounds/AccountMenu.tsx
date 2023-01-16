@@ -1,4 +1,4 @@
-import { Box, Button, HStack, IconButton, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Portal, Text, VStack } from "@chakra-ui/react"
+import { Box, Button, HStack, IconButton, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Portal, Text, VStack, Heading } from "@chakra-ui/react"
 import { RxAvatar } from "react-icons/rx"
 import { useActiveCustomerQuery } from "../operations/query/useActiveCustomerQuery"
 import { useLogoutMutation } from "../operations/query/useLogoutMutation"
@@ -35,7 +35,9 @@ const AccountMenu = () => {
                     <CustomLink href="/auth/login" w="full" _hover={{ textDecor: "none" }}>
                       <Button colorScheme='purple' w="full" rounded="none">Login</Button>
                     </CustomLink>
-                    or
+                    <Heading as="h4" fontSize="md">
+                      or
+                    </Heading>
                     <CustomLink href="/auth/register" w="full" _hover={{ textDecor: "none" }}>
                       <Button colorScheme='gray' w="full" rounded="none">Registration</Button>
                     </CustomLink>

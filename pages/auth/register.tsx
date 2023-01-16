@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, Container, HStack, Input, Select, SimpleGrid, Text } from "@chakra-ui/react"
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, Container, Heading, HStack, Input, Select, SimpleGrid, Text } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useRegisterMutation } from "../../operations/mutation/useRegisterMutation"
@@ -30,10 +30,12 @@ const Register = () => {
   }, [password, repeatPassword])
 
   return (
-    <Container maxW="container.xl" h="100vh" display="flex" alignItems="center">
+    <Container maxW="container.xl" h="95vh" display="flex" alignItems="center">
       <Card w="100%">
         <CardHeader fontSize="xx-large" fontWeight="bold">
-          Registration
+          <Heading as="h2" fontSize="4xl">
+            Registration
+          </Heading>
         </CardHeader>
         <CardBody>
           {registeredSucessfully ? (
@@ -46,38 +48,54 @@ const Register = () => {
             <form onSubmit={handleSubmit(onSubmit)}>
               <SimpleGrid columns={{ base: 1, md: 2 }} spacing="2">
                 <Box>
-                  Salutation *
+                  <Text>
+                    Salutation *
+                  </Text>
                   <Select placeholder="Please choose an salutation" {...register("salutation", { required: true })} isRequired>
                     <option value="Mr">Mr</option>
                     <option value="Mrs">Mrs</option>
                   </Select>
                 </Box>
                 <Box>
-                  Title
+                  <Text>
+                    Title
+                  </Text>
                   <Input type="text" {...register("title")} />
                 </Box>
                 <Box>
-                  First name *
+                  <Text>
+                    First name *
+                  </Text>
                   <Input type="text" {...register("firstName", { required: true })} isRequired />
                 </Box>
                 <Box>
-                  Last name *
+                  <Text>
+                    Last name *
+                  </Text>
                   <Input type="text" {...register("lastName", { required: true })} isRequired />
                 </Box>
                 <Box>
-                  E-Mail *
+                  <Text>
+                    E-Mail *
+                  </Text>
                   <Input type="email" {...register("emailAddress", { required: true })} isRequired />
                 </Box>
                 <Box>
-                  Mobile number
+                  <Text>
+                    Mobile number
+                  </Text>
                   <Input type="tel" {...register("phoneNumber")} />
                 </Box>
                 <Box>
-                  Password *
+                  <Text>
+                    Password *
+                  </Text>
                   <Input type="password" isRequired  {...register("password", { required: true })} onChange={e => setPassword(e.target.value)} />
                 </Box>
                 <Box>
-                  Repeat Password *
+                  <Text>
+                    Repeat Password *
+                  </Text>
                   <Input type="password" isRequired onChange={e => setRepeatPassword(e.target.value)} />
                 </Box>
                 <Box>
