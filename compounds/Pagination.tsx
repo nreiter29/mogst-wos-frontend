@@ -27,12 +27,12 @@ const Pagination: React.FC<{
     <HStack justify="center" align="center">
       {isLoading ? [...Array(2)].map((e, i) => <Skeleton w="126px" h="40px" key={'skeleton' + i} />) : (
         <>
-          <Button disabled={disabledLast} onClick={() => setPageNumber(pageNumber - 1)}>
+          <Button isDisabled={disabledLast} onClick={() => setPageNumber(pageNumber - 1)}>
             <HStack align="inherit">
               <AiOutlineLeft size="20px" /><Text fontSize="lg">Last site</Text>
             </HStack>
           </Button>
-          <Button disabled={disabledNext} onClick={() => setPageNumber(pageNumber + 1)}>
+          <Button isDisabled={disabledNext} onClick={() => setPageNumber(pageNumber + 1)}>
             <HStack align="inherit">
               <Text fontSize="lg">Next site</Text><AiOutlineRight fontSize="20px" />
             </HStack>

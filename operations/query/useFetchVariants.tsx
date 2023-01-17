@@ -1,35 +1,33 @@
 import { useEffect, useState } from "react"
 
 interface IVariantsData {
-  data: {
-    search: {
-      totalItems: number
-      items: Array<{
-        sku: string
-        slug: string
-        productId: string
-        productName: string
-        productVariantId: string
-        productVariantName: string
-        description: string
-        priceWithTax: {
-          value: number
-        }
-        productVariantAsset: {
-          preview: string
-        }
-      }>,
-      facetValues: Array<{
-        facetValue: {
+  search: {
+    totalItems: number
+    items: Array<{
+      sku: string
+      slug: string
+      productId: string
+      productName: string
+      productVariantId: string
+      productVariantName: string
+      description: string
+      priceWithTax: {
+        value: number
+      }
+      productVariantAsset: {
+        preview: string
+      }
+    }>,
+    facetValues: Array<{
+      facetValue: {
+        name: string
+        id: string
+        facet: {
           name: string
           id: string
-          facet: {
-            name: string
-            id: string
-          }
         }
-      }>
-    }
+      }
+    }>
   }
 }
 
@@ -97,7 +95,7 @@ export function useFetchVariants() {
         `
         })
       }).then(res => res.json()).then(res => {
-        setVariants(res)
+        setVariants(res.data)
         setAreVariantsLoading(false)
       }).catch(err => console.log(err))
     } else {
@@ -143,7 +141,7 @@ export function useFetchVariants() {
       `
         })
       }).then(res => res.json()).then(res => {
-        setVariants(res)
+        setVariants(res.data)
         setAreVariantsLoading(false)
       }).catch(err => console.log(err))
     }
