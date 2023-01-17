@@ -28,6 +28,10 @@ export const theme = extendTheme({
     global: () => ({
       body: {
         bg: "primaryBackground.500",
+        color: "primaryText.500",
+      },
+      _selection: {
+        backgroundColor: "selectionColor.500",
         color: "primaryText.500"
       }
     })

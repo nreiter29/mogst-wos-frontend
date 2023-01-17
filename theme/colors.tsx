@@ -31,4 +31,5 @@ export const colors = {
   primaryButtonColor: getShades("#735B4C"),
   secondaryButton: getShades("#6A546E"),
   backHome: getShades("#856B10"),
+  selectionColor: getShades("#DECAC8"),
 }
