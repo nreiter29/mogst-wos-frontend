@@ -112,7 +112,7 @@ const ProductPage = () => {
                   </Select>
                 )}
               </Box>
-              <Button as="div" bgColor="primaryButtonColor.500" color="primaryText.600" _hover={{ bgColor: "primaryButtonColor.300" }} w="full" mb="25px">Add to shopping cart</Button>
+              <Button as="div" bgColor="primaryButtonColor.500" color="secondaryText.500" _hover={{ bgColor: "primaryButtonColor.300" }} w="full" mb="25px">Add to shopping cart</Button>
               <Heading as="h3" fontSize="lg" pt="25px" color="primaryText.500">Description</Heading>
               <Text color="primaryText.500">{products?.description}</Text>
             </VStack>
@@ -121,7 +121,7 @@ const ProductPage = () => {
         <CardFooter>
           <Skeleton isLoaded={!isLoading} w="130px" h="40px" rounded="lg">
             <CustomLink href="/" _hover={{ textDecor: "none" }}>
-              <Button bgColor="backHome.500" _hover={{ bgColor: "backHome.600" }} as="div">Back to home</Button>
+              <Button bgColor="backHome.500" _hover={{ bgColor: "backHome.600" }} color="secondaryText.500" as="div">Back to home</Button>
             </CustomLink>
           </Skeleton>
         </CardFooter>
