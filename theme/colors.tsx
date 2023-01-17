@@ -25,5 +25,10 @@ function getShades(color: string) {
 }
 
 export const colors = {
-  hoverItem: getShades("#eeeeee")
+  primaryText: getShades("#43464B"),
+  secondaryText: getShades("#E9F1F2"),
+  primaryBackground: getShades("#FFF9F5"),
+  primaryButtonColor: getShades("#735B4C"),
+  secondaryButton: getShades("#6A546E"),
+  backHome: getShades("#516C68"),
 }

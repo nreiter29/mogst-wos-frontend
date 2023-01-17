@@ -17,7 +17,7 @@ const AccountMenu = () => {
             <IconButton icon={<RxAvatar size="42px" />} size="fit-content" aria-label={""} backgroundColor="inherit" _hover={{ bgColor: "inherit" }} _active={{ bgColor: "inherit" }} />
           </PopoverTrigger>
           <Portal>
-            <PopoverContent>
+            <PopoverContent bgColor="primaryBackground.500">
               <PopoverArrow />
               <PopoverHeader><Heading as="h3" fontSize="lg">Account</Heading></PopoverHeader>
               <PopoverCloseButton />
@@ -32,13 +32,13 @@ const AccountMenu = () => {
                 ) : (
                   <>
                     <CustomLink href="/auth/login" w="full" _hover={{ textDecor: "none" }}>
-                      <Button colorScheme='purple' w="full" rounded="none">Login</Button>
+                      <Button bgColor="primaryButtonColor.500" color="secondaryText.500" _hover={{ bgColor: "primaryButtonColor.300" }} w="full" rounded="none">Login</Button>
                     </CustomLink>
                     <Heading as="h4" fontSize="md">
                       or
                     </Heading>
                     <CustomLink href="/auth/register" w="full" _hover={{ textDecor: "none" }}>
-                      <Button colorScheme='gray' w="full" rounded="none">Registration</Button>
+                      <Button bgColor="secondaryButton.500" w="full" rounded="none" color="secondaryText.500" _hover={{ bgColor: "secondaryButton.300" }}>Registration</Button>
                     </CustomLink>
                   </>
                 )}

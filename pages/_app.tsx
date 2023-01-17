@@ -1,5 +1,5 @@
 import type { AppProps } from 'next/app'
-import { ChakraProvider, GlobalStyle, Text } from '@chakra-ui/react'
+import { Box, ChakraProvider, GlobalStyle, Text } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useState } from 'react'
 import { IntlProvider } from 'react-intl'
@@ -14,7 +14,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   return (
     <IntlProvider locale="de" onError={() => { }}>
       <QueryClientProvider client={queryClient}>
-        <ChakraProvider theme={theme}>
+        <ChakraProvider theme={theme} >
           <Fonts />
           <Navbar closeSearchResults={closeSearchResults} setCloseSearchResults={setCloseSearchResults} />
           <Component {...pageProps} closeSearchResults={closeSearchResults} />

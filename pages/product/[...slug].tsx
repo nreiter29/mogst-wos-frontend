@@ -62,10 +62,10 @@ const ProductPage = () => {
 
   return (
     <Container maxW="container.xl" h="95vh" display="flex" alignItems="center">
-      <Card w="100%">
+      <Card w="100%" bgColor="primaryBackground.500">
         <CardHeader w="fit-content">
           <Skeleton isLoaded={!isLoading} h="36px" w="180px">
-            <Heading fontSize="4xl" whiteSpace="nowrap">
+            <Heading fontSize="4xl" whiteSpace="nowrap" color="primaryText.500">
               {products?.name}
             </Heading>
           </Skeleton>
@@ -88,9 +88,9 @@ const ProductPage = () => {
             <VStack w="full" align="left" spacing="0">
               <Skeleton isLoaded={!isLoading} h="30px" w="full" mb="10px">
                 <Flex align="center" justify="space-between" w="full" mb="10px">
-                  <Heading fontSize="xl">{products?.name}</Heading>
+                  <Heading fontSize="xl" color="primaryText.500">{products?.name}</Heading>
                   {product?.priceWithTax && (
-                    <Text fontSize="xl">
+                    <Text fontSize="xl" color="primaryText.500">
                       <FormattedNumber
                         value={+product?.priceWithTax / 100}
                         style="currency"
@@ -103,7 +103,7 @@ const ProductPage = () => {
               </Skeleton>
               <Box>
                 {products?.variants && products?.variants.length > 1 && (
-                  <Select placeholder="Select an option" marginBottom="10px" value={product?.name} onChange={v => setSelectedValue(v.target.value)}>
+                  <Select placeholder="Select an option" color="primaryText.500" marginBottom="10px" value={product?.name} onChange={v => setSelectedValue(v.target.value)}>
                     {products?.variants.map((v, index) => {
                       return (
                         <option key={v && index}>{v.name}</option>
@@ -112,16 +112,16 @@ const ProductPage = () => {
                   </Select>
                 )}
               </Box>
-              <Button as="div" colorScheme="purple" w="full" mb="25px">Add to shopping cart</Button>
-              <Heading as="h3" fontSize="lg" pt="25px">Description</Heading>
-              <Text>{products?.description}</Text>
+              <Button as="div" bgColor="primaryButtonColor.500" color="primaryText.600" _hover={{ bgColor: "primaryButtonColor.300" }} w="full" mb="25px">Add to shopping cart</Button>
+              <Heading as="h3" fontSize="lg" pt="25px" color="primaryText.500">Description</Heading>
+              <Text color="primaryText.500">{products?.description}</Text>
             </VStack>
           </SimpleGrid>
         </CardBody>
         <CardFooter>
           <Skeleton isLoaded={!isLoading} w="130px" h="40px" rounded="lg">
             <CustomLink href="/" _hover={{ textDecor: "none" }}>
-              <Button colorScheme="red" as="div">Back to home</Button>
+              <Button bgColor="backHome.500" _hover={{ bgColor: "backHome.600" }} as="div">Back to home</Button>
             </CustomLink>
           </Skeleton>
         </CardFooter>

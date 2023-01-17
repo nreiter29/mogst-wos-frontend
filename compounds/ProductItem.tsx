@@ -24,15 +24,15 @@ export interface IProductItem {
 const ProductItem: React.FC<IProductItem> = ({ canHover, item }) => {
     return (
         <CustomLink href={`/product/${item.slug}?sku=${item.sku}`} _hover={{ textDecor: "none" }}>
-            <Box _hover={{ backgroundColor: canHover && "hoverItem.500" }} transition=".5s" boxShadow="xl" rounded="lg" h="440px">
+            <Box _hover={{ backgroundColor: canHover && "primaryBackground.550" }} transition=".5s" boxShadow="xl" rounded="lg" h="440px">
                 <Box height="380px">
                     <Image
                         rounded="lg"
-                        src={item.productVariantAsset?.preview ?? "https://images.unsplash.com/photo-1661006670127-b560e732ce28?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"}
+                        src={item.productVariantAsset?.preview ?? "/macbook.png"}
                         alt={item.productVariantName ?? "Standard Picture"}
                         h="full"
                         w="full"
-                        objectFit="cover"
+                        objectFit="contain"
                         objectPosition="center"
                         p="3"
                         transition=".5s"

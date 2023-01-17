@@ -44,13 +44,17 @@ const Filter: React.FC<{
             </VStack>
             {isLoading ?
                 <Skeleton w="175px" h="40px" /> :
-                <Button fontSize="lg" onClick={() => (setFacetNumber([]), toast({
-                    title: "Filter reseted",
-                    description: "The filter reseted succesfully.",
-                    status: "success",
-                    duration: 2500,
-                    isClosable: true
-                }), setIsChecked(false))}>Reset filter</Button>
+                <Button fontSize="lg"
+                    color="secondaryText.500"
+                    bgColor="primaryButtonColor.500"
+                    _hover={{ bgColor: "primaryButtonColor.300" }}
+                    onClick={() => (setFacetNumber([]), toast({
+                        title: "Filter reseted",
+                        description: "The filter reseted succesfully.",
+                        status: "success",
+                        duration: 2500,
+                        isClosable: true
+                    }), setIsChecked(false))}>Reset filter</Button>
             }
         </VStack >
     )

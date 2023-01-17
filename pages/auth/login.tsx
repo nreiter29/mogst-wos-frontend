@@ -25,7 +25,7 @@ const Register = () => {
 
   return (
     <Container maxW="container.xl" h="95vh" display="flex" alignItems="center">
-      <Card w="100%">
+      <Card w="100%" bgColor="primaryBackground.500">
         <CardHeader>
           <Heading as="h2" fontSize="4xl">
             Login
@@ -56,7 +56,7 @@ const Register = () => {
               </HStack>
               <Box>
                 <Text color="red">{isLoginDataFalse && "E-Mail or password is wrong!"}</Text>
-                <Button type="submit" w="50%" colorScheme="purple">Login</Button>
+                <Button type="submit" w="50%" bgColor="primaryButtonColor.500" color="secondaryText.500" _hover={{ bgColor: "primaryButtonColor.300" }}>Login</Button>
               </Box>
             </form>
           )}
@@ -64,13 +64,13 @@ const Register = () => {
         <CardFooter>
           <HStack align="center">
             <CustomLink href="/" _hover={{ textDecor: "none" }}>
-              <Button colorScheme="red" as="div">Back to home</Button>
+              <Button bgColor="backHome.500" _hover={{ bgColor: "backHome.600" }} color="secondaryText.500" as="div">Back to home</Button>
             </CustomLink>
             {!loginSuccesfully && (
               <>
                 <Text>or</Text>
                 <CustomLink href="/auth/register" _hover={{ textDecor: "none" }}>
-                  <Button colorScheme="gray" as="div">Go to register</Button>
+                  <Button bgColor="secondaryButton.500" color="secondaryText.500" _hover={{ bgColor: "secondaryButton.300" }} as="div">Go to register</Button>
                 </CustomLink>
               </>
             )}

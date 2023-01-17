@@ -23,5 +23,13 @@ export const theme = extendTheme({
     heading: `"SFProMedium"`,
     body: `"SFProRegular"`,
     text: `"SFProRegular"`,
+  },
+  styles: {
+    global: () => ({
+      body: {
+        bg: "primaryBackground.500",
+        color: "primaryText.500"
+      }
+    })
   }
 })

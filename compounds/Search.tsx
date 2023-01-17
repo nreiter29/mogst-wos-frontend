@@ -60,8 +60,8 @@ const Search: React.FC<{
             return (
               <Skeleton isLoaded={!isLoading} key={"Searchbar" + item.sku + index}>
                 <Box
-                  color="secondaryText.900"
-                  _hover={{ bgColor: "gray.200" }}
+                  bgColor="primaryBackground.500"
+                  _hover={{ bgColor: "primaryBackground.550" }}
                   p="10px"
                   transition="0.25s"
                 >
@@ -75,10 +75,10 @@ const Search: React.FC<{
                         src={item.productVariantAsset?.preview ?? "https://images.unsplash.com/photo-1661006670127-b560e732ce28?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"}
                         alt={item.productVariantName ?? "Standard Picture"} />
                       <VStack spacing="0" align="flex-start">
-                        <Heading _hover={{ color: 'accent.500' }} transition="0.25s" fontSize="md">
+                        <Heading transition="0.25s" fontSize="md">
                           {item.productVariantName}
                         </Heading>
-                        <Text color="gray">
+                        <Text color="primaryText.400">
                           Artikelnummer: {item.sku}
                         </Text>
                       </VStack>

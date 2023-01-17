@@ -19,9 +19,9 @@ interface ICombined extends IColors, ISearchBar { }
 
 export const SearchBar: React.FC<ICombined> = ({
     colorBackground = 'secondaryBackground.500',
-    colorAccent = 'accent.650',
+    colorAccent = 'primaryButtonColor.500',
     colorText = 'secondaryText.900',
-    colorIcon = 'secondaryText.500',
+    colorIcon = 'primaryButtonColor.500',
     isLoading = false,
     searchOpen = false,
     ...inputProps
@@ -51,6 +51,7 @@ export const SearchBar: React.FC<ICombined> = ({
                 }}
                 {...inputProps}
                 mr="1"
+                borderColor="primaryButtonColor.500"
             />
             <InputRightElement>
                 <IconButton

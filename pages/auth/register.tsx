@@ -31,7 +31,7 @@ const Register = () => {
 
   return (
     <Container maxW="container.xl" h="95vh" display="flex" alignItems="center">
-      <Card w="100%">
+      <Card w="100%" bgColor="primaryBackground.500">
         <CardHeader>
           <Heading as="h2" fontSize="4xl">
             Registration
@@ -100,7 +100,7 @@ const Register = () => {
                 </Box>
                 <Box>
                   <Text color="red">{!passwordMatch && "Passwords doesn't match"}</Text>
-                  <Button type="submit" disabled={!passwordMatch} w="full" colorScheme="purple">Register</Button>
+                  <Button type="submit" disabled={!passwordMatch} w="full" bgColor="primaryButtonColor.500" color="secondaryText.500" _hover={{ bgColor: "primaryButtonColor.300" }}>Register</Button>
                 </Box>
               </SimpleGrid>
             </form>
@@ -110,16 +110,16 @@ const Register = () => {
           {registeredSucessfully ? (
             <HStack align="center" >
               <CustomLink href="/auth/login" _hover={{ textDecor: "none" }}>
-                <Button colorScheme="purple" as="div">Go to login</Button>
+                <Button bgColor="primaryButtonColor.500" color="secondaryText.500" _hover={{ bgColor: "primaryButtonColor.300" }} as="div">Go to login</Button>
               </CustomLink>
               <Text>or</Text>
               <CustomLink href="/" _hover={{ textDecor: "none" }}>
-                <Button colorScheme="red" as="div">Back to home</Button>
+                <Button bgColor="backHome.500" _hover={{ bgColor: "backHome.600" }} color="secondaryText.500" as="div">Back to home</Button>
               </CustomLink>
             </HStack>
           ) : (
             <CustomLink href="/" _hover={{ textDecor: "none" }}>
-              <Button colorScheme="red" as="div">Back to home</Button>
+              <Button bgColor="backHome.500" _hover={{ bgColor: "backHome.600" }} color="secondaryText.500" as="div">Back to home</Button>
             </CustomLink>
           )}
         </CardFooter>
