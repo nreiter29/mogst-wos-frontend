@@ -9,7 +9,7 @@ import Footer from '../compounds/Footer'
 import { useFetchVariants } from '../operations/query/useFetchVariants'
 
 const App = ({ Component, pageProps }: AppProps) => {
-  const { variants, areVariantsLoading, setFacetNumber, pageNumber, setPageNumber } = useFetchVariants()
+  const { variants, areVariantsLoading, setFacetNumber, pageNumber, setPageNumber, err } = useFetchVariants()
   const [queryClient] = useState(() => new QueryClient())
   const [closeSearchResults, setCloseSearchResults] = useState(true)
 
@@ -18,11 +18,13 @@ const App = ({ Component, pageProps }: AppProps) => {
       <QueryClientProvider client={queryClient}>
         <ChakraProvider theme={theme} >
           <Fonts />
-          <Navbar
-            closeSearchResults={closeSearchResults}
-            setCloseSearchResults={setCloseSearchResults}
-            isLoading={areVariantsLoading}
-          />
+          {err == 8 && (
+            <Navbar
+              closeSearchResults={closeSearchResults}
+              setCloseSearchResults={setCloseSearchResults}
+              isLoading={areVariantsLoading}
+            />
+          )}
           <Component
             {...pageProps}
             closeSearchResults={closeSearchResults}
@@ -31,6 +33,7 @@ const App = ({ Component, pageProps }: AppProps) => {
             setFacetNumber={setFacetNumber}
             pageNumber={pageNumber}
             setPageNumber={setPageNumber}
+            err={err}
           />
           <Footer />
         </ChakraProvider>

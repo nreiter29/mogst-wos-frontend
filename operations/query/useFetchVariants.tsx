@@ -38,6 +38,7 @@ export function useFetchVariants() {
   const [variants, setVariants] = useState<IVariantsData>()
   const [refetched, setRefetched] = useState(false)
   const [pageNumber, setPageNumber] = useState<number>(0)
+  const [err, setErr] = useState<any | undefined>(8)
 
   const refetch = () => {
     setRefetched(!refetched)
@@ -97,7 +98,7 @@ export function useFetchVariants() {
       }).then(res => res.json()).then(res => {
         setVariants(res.data)
         setAreVariantsLoading(false)
-      }).catch(err => console.log(err))
+      }).catch(err => setErr(err))
     } else {
       fetch('http://localhost:3001/shop-api', {
         method: 'POST',
@@ -143,9 +144,9 @@ export function useFetchVariants() {
       }).then(res => res.json()).then(res => {
         setVariants(res.data)
         setAreVariantsLoading(false)
-      }).catch(err => console.log(err))
+      }).catch(err => setErr(err))
     }
   }, [refetched])
 
-  return { variants, areVariantsLoading, setFacetNumber, pageNumber, setPageNumber }
+  return { variants, areVariantsLoading, setFacetNumber, pageNumber, setPageNumber, err }
 }
