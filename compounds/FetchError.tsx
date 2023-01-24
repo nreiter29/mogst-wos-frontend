@@ -1,5 +1,5 @@
-import { Box, Card, CardBody, CardHeader, Container, Text, Stack, Heading, CardFooter } from "@chakra-ui/react"
-import { BiErrorAlt } from "react-icons/bi"
+import { Card, CardBody, CardFooter, CardHeader, Container, Heading, Text } from '@chakra-ui/react'
+import { BiErrorAlt } from 'react-icons/bi'
 
 const FetchError = () => {
   return (
