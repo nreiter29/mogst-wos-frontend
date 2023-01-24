@@ -3,7 +3,7 @@ import { Box, Button, Card, CardBody, CardFooter, CardHeader, Container, Flex, H
 import { NextPage } from "next"
 import { IProductsSlug, useProductQuery } from "../../operations/query/useProductQuery"
 import { useEffect, useState } from "react"
-import NextImage from "next/image"
+import NextImage from "next/legacy/image";
 import { FormattedNumber } from "react-intl"
 import { CustomLink } from "../../utility/CustomLink"
 
