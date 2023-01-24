@@ -3,11 +3,16 @@ import Filter from "../compounds/Filter";
 import Pagination from "../compounds/Pagination";
 import ProductItem from "../compounds/ProductItem";
 import { formatFacetValues } from "../helper/formatFacetValues";
-import { useFetchVariants } from "../operations/query/useFetchVariants";
+import { IVariantsData } from "../operations/query/useFetchVariants";
 
-const Home: React.FC<{ closeSearchResults: boolean }> = ({ closeSearchResults }) => {
-
-  const { variants, areVariantsLoading, setFacetNumber, pageNumber, setPageNumber } = useFetchVariants()
+const Home: React.FC<{
+  closeSearchResults: boolean,
+  variants: IVariantsData | undefined,
+  areVariantsLoading: boolean,
+  setFacetNumber: (v: number[] | null) => void,
+  pageNumber: number,
+  setPageNumber: (num: number) => void,
+}> = ({ closeSearchResults, variants, areVariantsLoading, setFacetNumber, pageNumber, setPageNumber }) => {
 
   return (
     <Container maxW="container.xl">

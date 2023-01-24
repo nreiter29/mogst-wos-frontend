@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-interface IVariantsData {
+export interface IVariantsData {
   search: {
     totalItems: number
     items: Array<{

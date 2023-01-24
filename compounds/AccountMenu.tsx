@@ -1,10 +1,11 @@
 import { Box, Button, HStack, IconButton, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Portal, Text, VStack, Heading } from "@chakra-ui/react"
 import { RxAvatar } from "react-icons/rx"
 import { useActiveCustomerQuery } from "../operations/query/useActiveCustomerQuery"
+import { useFetchVariants } from "../operations/query/useFetchVariants"
 import { useLogoutMutation } from "../operations/query/useLogoutMutation"
 import { CustomLink } from "../utility/CustomLink"
 
-const AccountMenu = () => {
+const AccountMenu: React.FC<{ isLoading: boolean }> = ({ isLoading }) => {
   const { activeCustomerData, refetch } = useActiveCustomerQuery()
   const logout = useLogoutMutation()
 
@@ -14,7 +15,7 @@ const AccountMenu = () => {
       <Box>
         <Popover>
           <PopoverTrigger>
-            <IconButton icon={<RxAvatar size="42px" />} size="fit-content" aria-label={""} backgroundColor="inherit" _hover={{ bgColor: "inherit" }} _active={{ bgColor: "inherit" }} />
+            <IconButton isDisabled={isLoading} icon={<RxAvatar size="42px" />} size="fit-content" aria-label={""} backgroundColor="inherit" _hover={{ bgColor: "inherit" }} _active={{ bgColor: "inherit" }} />
           </PopoverTrigger>
           <Portal>
             <PopoverContent bgColor="primaryBackground.500">

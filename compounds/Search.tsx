@@ -8,16 +8,18 @@ import { CustomLink } from "../utility/CustomLink";
 const Search: React.FC<{
   setCloseSearchResults: (v: boolean) => void,
   closeSearchResults: boolean,
-}> = ({ setCloseSearchResults, closeSearchResults, }) => {
+  isLoading: boolean
+}> = ({ setCloseSearchResults, closeSearchResults, isLoading: areVariantsLoading }) => {
 
   const [searchInput, setSearchInput] = useState('')
   const debouncedSearchInput = useDebounce(searchInput, 500)
   const { data, isLoading, refetch } = useSearchQuery(searchInput)
 
-
   useEffect(() => {
-    if (debouncedSearchInput.length > 2 && data?.data.search.items.length != 0) {
-      refetch()
+    if (!areVariantsLoading) {
+      if (debouncedSearchInput.length > 2 && data?.data.search.items.length != 0) {
+        refetch()
+      }
     }
   }, [debouncedSearchInput.length])
 
@@ -26,7 +28,6 @@ const Search: React.FC<{
     ref: ref,
     handler: () => setCloseSearchResults(true),
   })
-
 
   return (
     <>
@@ -39,9 +40,9 @@ const Search: React.FC<{
         searchOpen={!closeSearchResults}
         isInvalid={data?.data.search?.items?.length == 0}
         errorBorderColor="red"
-        onClick={() => setCloseSearchResults(false)}
+        onClick={() => !areVariantsLoading && setCloseSearchResults(false)}
       />
-      {!closeSearchResults && (
+      {!areVariantsLoading && !closeSearchResults && (
         <Stack
           spacing={0}
           border="1px"
