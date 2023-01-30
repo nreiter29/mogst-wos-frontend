@@ -13,9 +13,9 @@ export interface ILoginForm {
 
 const Register = () => {
   const { register, handleSubmit } = useForm<ILoginForm>()
-  const { setRefetch, loginSuccesfully, isLoginDataFalse } = useLoginMutation()
+  const { getData, loginSuccesfully, isLoginDataFalse } = useLoginMutation()
   const { activeCustomerData, refetch } = useActiveCustomerQuery()
-  const onSubmit: SubmitHandler<ILoginForm> = data => setRefetch(data)
+  const onSubmit: SubmitHandler<ILoginForm> = data => getData(data)
 
   useEffect(() => {
     if (loginSuccesfully) {

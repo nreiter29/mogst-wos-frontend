@@ -23,7 +23,7 @@ const Filter: React.FC<{
     }, [isChecked])
 
     return (
-        <VStack py={{ base: "6", sm: "0" }} px={{ base: "4", sm: "6", lg: "8" }} align="left">
+        <VStack py={{ base: "6", sm: "0" }} align="left">
             <Heading fontSize="4xl" as="h3" mb="6" mt="8">Filter</Heading>
             <VStack align="inherit">
                 {isLoading && [...Array(4)].map((e, i) => <Skeleton key={'skeleton' + i} w="175px" h="46px" />)}

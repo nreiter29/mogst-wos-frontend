@@ -1,9 +1,11 @@
 import { Box, Container, Heading, HStack, SimpleGrid, Skeleton } from '@chakra-ui/react'
+import { useMemo } from 'react'
 import FetchError from '../compounds/FetchError'
 import Filter from '../compounds/Filter'
 import Pagination from '../compounds/Pagination'
 import ProductItem from '../compounds/ProductItem'
 import { formatFacetValues } from '../helper/formatFacetValues'
+import { useActiveCustomerQuery } from '../operations/query/useActiveCustomerQuery'
 import type { IVariantsData } from '../operations/query/useFetchVariants'
 
 const Home: React.FC<{

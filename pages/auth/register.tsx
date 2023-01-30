@@ -51,7 +51,7 @@ const Register = () => {
                   <Text>
                     Salutation *
                   </Text>
-                  <Select placeholder="Please choose an salutation" {...register("salutation", { required: true })} isRequired>
+                  <Select placeholder="Please choose a salutation" {...register("salutation", { required: true })} isRequired>
                     <option value="Mr">Mr</option>
                     <option value="Mrs">Mrs</option>
                   </Select>

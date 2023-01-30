@@ -54,7 +54,7 @@ export function useFetchVariants() {
 
   useEffect(() => {
     if (facetNumber == null) {
-      fetch('http://localhost:3001/shop-api', {
+      fetch(process.env.NEXT_PUBLIC_BACKEND_URL ?? "", {
         method: 'POST',
         credentials: "include",
         headers: {
@@ -100,7 +100,7 @@ export function useFetchVariants() {
         setAreVariantsLoading(false)
       }).catch(err => setErr(err))
     } else {
-      fetch('http://localhost:3001/shop-api', {
+      fetch(process.env.NEXT_PUBLIC_BACKEND_URL ?? "", {
         method: 'POST',
         credentials: "include",
         headers: {

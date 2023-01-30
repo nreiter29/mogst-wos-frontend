@@ -1,6 +1,6 @@
-import { Box, Heading, HStack, Image } from "@chakra-ui/react"
-import { FormattedNumber } from "react-intl"
-import { CustomLink } from "../utility/CustomLink"
+import { Box, Heading, HStack, Image } from '@chakra-ui/react'
+import { FormattedNumber } from 'react-intl'
+import { CustomLink } from '../utility/CustomLink'
 
 export interface IProductItem {
     canHover: boolean
@@ -15,28 +15,29 @@ export interface IProductItem {
         priceWithTax: {
             value: number
         }
-        productVariantAsset: {
+        productVariantAsset?: {
             preview: string
         }
     }
 }
 
 const ProductItem: React.FC<IProductItem> = ({ canHover, item }) => {
+
     return (
-        <CustomLink href={`/product/${item.slug}?sku=${item.sku}`} _hover={{ textDecor: "none" }}>
-            <Box _hover={{ backgroundColor: canHover && "primaryBackground.550" }} transition=".5s" boxShadow="xl" rounded="lg" h="440px">
+        <CustomLink href={`/product/${item.slug}?sku=${item.sku}`} _hover={{ textDecor: 'none' }}>
+            <Box _hover={{ backgroundColor: canHover && 'primaryBackground.550' }} transition=".5s" boxShadow="xl" rounded="lg" h="440px">
                 <Box height="380px">
                     <Image
                         rounded="lg"
-                        src={item.productVariantAsset?.preview ?? "/macbook.png"}
-                        alt={item.productVariantName ?? "Standard Picture"}
+                        src={item.productVariantAsset?.preview ?? '/macbook.png'}
+                        alt={item.productVariantName ?? 'Standard Picture'}
                         h="full"
                         w="full"
                         objectFit="contain"
                         objectPosition="center"
                         p="3"
                         transition=".5s"
-                        _hover={{ p: canHover && "0" }}
+                        _hover={{ p: canHover && '0' }}
                     />
                 </Box>
                 <HStack justify="space-between" align="center" fontSize="sm" p="1" spacing="0" mx="3">
@@ -46,7 +47,8 @@ const ProductItem: React.FC<IProductItem> = ({ canHover, item }) => {
                         style="currency"
                         currency="EUR"
                         minimumFractionDigits={2}
-                        maximumFractionDigits={2} />
+                        maximumFractionDigits={2}
+                    />
                 </HStack>
             </Box>
         </CustomLink>

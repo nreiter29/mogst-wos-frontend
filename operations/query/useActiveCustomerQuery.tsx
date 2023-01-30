@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-interface IActiveCustomerData {
+export interface IActiveCustomerData {
   data?: {
     activeCustomer?: {
       title: string
@@ -22,7 +22,7 @@ export function useActiveCustomerQuery() {
   }
 
   useEffect(() => {
-    fetch('http://localhost:3001/shop-api', {
+    fetch(process.env.NEXT_PUBLIC_BACKEND_URL ?? "", {
       method: 'POST',
       credentials: "include",
       headers: {

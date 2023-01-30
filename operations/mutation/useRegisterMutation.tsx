@@ -7,7 +7,7 @@ export function useRegisterMutation() {
 
   useEffect(() => {
     if (refetch) {
-      fetch('http://localhost:3001/shop-api', {
+      fetch(process.env.NEXT_PUBLIC_BACKEND_URL ?? "", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

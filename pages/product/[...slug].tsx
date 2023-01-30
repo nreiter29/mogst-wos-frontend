@@ -1,9 +1,9 @@
 import { useRouter } from "next/router"
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, Container, Flex, Heading, Image, Select, SimpleGrid, Skeleton, Text, VStack } from "@chakra-ui/react"
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, Container, Flex, Heading, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Select, SimpleGrid, Skeleton, Text, useDisclosure, VStack } from "@chakra-ui/react"
 import { NextPage } from "next"
 import { IProductsSlug, useProductQuery } from "../../operations/query/useProductQuery"
 import { useEffect, useState } from "react"
-import NextImage from "next/legacy/image";
+import NextImage from "next/image";
 import { FormattedNumber } from "react-intl"
 import { CustomLink } from "../../utility/CustomLink"
 
@@ -41,6 +41,7 @@ const ProductPage = () => {
   const [product, setProduct] = useState<IProduct>()
   const [selectedValue, setSelectedValue] = useState<string>()
   const [sku, setSku] = useState<string | undefined>(undefined)
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   useEffect(() => {
     if (products && selectedValue) {
@@ -75,15 +76,49 @@ const ProductPage = () => {
             <VStack align="left" w="full">
               <Skeleton isLoaded={!isLoading} rounded="xl">
                 <Image
+                  onClick={onOpen}
+                  _hover={{ cursor: "pointer" }}
                   rounded="xl"
-                  src={product && product.assets && product.assets.length > 0 ? product.assets[0].source : "https://images.unsplash.com/photo-1661006670127-b560e732ce28?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"}
+                  src={product && product.assets && product.assets.length > 0 ? product.assets[0].source : "/macbook.png"}
                   alt={product && product.assets && product.assets.length > 0 ? product.assets[0].name : "Standard Picture"}
-                  objectFit="cover"
+                  objectFit="contain"
                   objectPosition="center"
                   width="515px"
                   height="515px"
                 />
               </Skeleton>
+              <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay>
+                  <ModalCloseButton color="white" cursor="pointer" />
+                </ModalOverlay>
+                <ModalContent
+                  onClick={onClose}
+                  bgColor="transparent"
+                  w={{ base: '100%', lg: '1000px' }}
+                  h={{ base: '700px', lg: '1000px' }}
+                  alignSelf="center"
+                  justifySelf="center"
+                >
+                  <ModalBody
+                    bg="primaryBackground.500"
+                    display="flex"
+                    alignSelf="center"
+                    justifySelf="center"
+                    w={{ base: '100%', lg: '1000px' }}
+                    h={{ base: '700px', lg: '1000px' }}
+                    p="6"
+                  >
+                    <Image
+                      src={product && product.assets && product.assets.length > 0 ? product.assets[0].source : "/macbook.png"}
+                      alt={product && product.assets && product.assets.length > 0 ? product.assets[0].name : "Standard Picture"}
+                      objectFit="contain"
+                      objectPosition="center"
+                      width="100%"
+                      h="100%"
+                    />
+                  </ModalBody>
+                </ModalContent>
+              </Modal>
             </VStack>
             <VStack w="full" align="left" spacing="0">
               <Skeleton isLoaded={!isLoading} h="30px" w="full" mb="10px">

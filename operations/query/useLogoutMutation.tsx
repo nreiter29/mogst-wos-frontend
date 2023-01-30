@@ -19,7 +19,7 @@ export function useLogoutMutation() {
 
   useEffect(() => {
     if (logoutBoolean) {
-      fetch('http://localhost:3001/shop-api', {
+      fetch(process.env.NEXT_PUBLIC_BACKEND_URL ?? "", {
         method: 'POST',
         credentials: "include",
         headers: {

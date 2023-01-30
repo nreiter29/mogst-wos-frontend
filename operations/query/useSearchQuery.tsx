@@ -33,7 +33,7 @@ export function useSearchQuery(input: string) {
     }, [refetched])
 
     useEffect(() => {
-        fetch('http://localhost:3001/shop-api', {
+        fetch(process.env.NEXT_PUBLIC_BACKEND_URL ?? "", {
             method: 'POST',
             credentials: "include",
             headers: {
