@@ -1,9 +1,10 @@
-import { Container, Heading, Box, VStack, Card, CardHeader, CardBody, Input, Select, Flex, SimpleGrid, Text, Button, CardFooter, HStack, Checkbox } from "@chakra-ui/react"
-import { useEffect, useState } from "react"
-import { useForm, SubmitHandler } from "react-hook-form"
-import { useLoginMutation } from "../../operations/mutation/useLoginMutation"
-import { useActiveCustomerQuery } from "../../operations/query/useActiveCustomerQuery"
-import { CustomLink } from "../../utility/CustomLink"
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, Checkbox, Container, Heading, HStack, Input, SimpleGrid, Text } from '@chakra-ui/react'
+import { useEffect } from 'react'
+import type { SubmitHandler } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
+import { useLoginMutation } from '../../operations/mutation/useLoginMutation'
+import type { IActiveCustomerData } from '../../operations/query/useActiveCustomerQuery'
+import { CustomLink } from '../../utility/CustomLink'
 
 export interface ILoginForm {
   emailAddress: string
@@ -11,10 +12,9 @@ export interface ILoginForm {
   rememberMe: boolean
 }
 
-const Register = () => {
+const Register: React.FC<{activeCustomerData: IActiveCustomerData | undefined, refetch: () => void}> = ({ activeCustomerData, refetch }) => {
   const { register, handleSubmit } = useForm<ILoginForm>()
   const { getData, loginSuccesfully, isLoginDataFalse } = useLoginMutation()
-  const { activeCustomerData, refetch } = useActiveCustomerQuery()
   const onSubmit: SubmitHandler<ILoginForm> = data => getData(data)
 
   useEffect(() => {
@@ -32,45 +32,47 @@ const Register = () => {
           </Heading>
         </CardHeader>
         <CardBody>
-          {loginSuccesfully ? (
-            <Text fontSize="lg">
-              Hey {activeCustomerData?.data?.activeCustomer?.customFields.salutation} {activeCustomerData?.data?.activeCustomer?.title} {activeCustomerData?.data?.activeCustomer?.lastName},
-              <br />
-              you have <strong>successfully</strong> logged in!
-            </Text>
-          ) : (
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <SimpleGrid columns={{ base: 1, md: 2 }} spacing="2">
+          {loginSuccesfully
+            ? (
+              <Text fontSize="lg">
+                Hey {activeCustomerData?.activeCustomer?.customFields.salutation} {activeCustomerData?.activeCustomer?.title} {activeCustomerData?.activeCustomer?.lastName},
+                <br/>
+                you have <strong>successfully</strong> logged in!
+              </Text>
+              )
+            : (
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <SimpleGrid columns={{ base: 1, md: 2 }} spacing="2">
+                  <Box>
+                    <Text>E-Mail *</Text>
+                    <Input type="email" isRequired {...register('emailAddress', { required: true })}/>
+                  </Box>
+                  <Box>
+                    <Text>Password *</Text>
+                    <Input type="password" isRequired {...register('password', { required: true })}/>
+                  </Box>
+                </SimpleGrid>
+                <HStack align="center" my="2">
+                  <Text>Remember me</Text>
+                  <Checkbox {...register('rememberMe')}/>
+                </HStack>
                 <Box>
-                  <Text>E-Mail *</Text>
-                  <Input type="email" isRequired {...register("emailAddress", { required: true })} />
+                  <Text color="red">{isLoginDataFalse && 'E-Mail or password is wrong!'}</Text>
+                  <Button type="submit" w="50%" bgColor="primaryButtonColor.500" color="secondaryText.500" _hover={{ bgColor: 'primaryButtonColor.300' }}>Login</Button>
                 </Box>
-                <Box>
-                  <Text>Password *</Text>
-                  <Input type="password" isRequired {...register("password", { required: true })} />
-                </Box>
-              </SimpleGrid>
-              <HStack align="center" my="2">
-                <Text>Remember me</Text>
-                <Checkbox {...register("rememberMe")} />
-              </HStack>
-              <Box>
-                <Text color="red">{isLoginDataFalse && "E-Mail or password is wrong!"}</Text>
-                <Button type="submit" w="50%" bgColor="primaryButtonColor.500" color="secondaryText.500" _hover={{ bgColor: "primaryButtonColor.300" }}>Login</Button>
-              </Box>
-            </form>
-          )}
+              </form>
+              )}
         </CardBody>
         <CardFooter>
           <HStack align="center">
-            <CustomLink href="/" _hover={{ textDecor: "none" }}>
-              <Button bgColor="backHome.500" _hover={{ bgColor: "backHome.600" }} color="secondaryText.500" as="div">Back to home</Button>
+            <CustomLink href="/" _hover={{ textDecor: 'none' }}>
+              <Button bgColor="backHome.500" _hover={{ bgColor: 'backHome.600' }} color="secondaryText.500" as="div">Back to home</Button>
             </CustomLink>
             {!loginSuccesfully && (
               <>
                 <Text>or</Text>
-                <CustomLink href="/auth/register" _hover={{ textDecor: "none" }}>
-                  <Button bgColor="secondaryButton.500" color="secondaryText.500" _hover={{ bgColor: "secondaryButton.300" }} as="div">Go to register</Button>
+                <CustomLink href="/auth/register" _hover={{ textDecor: 'none' }}>
+                  <Button bgColor="secondaryButton.500" color="secondaryText.500" _hover={{ bgColor: 'secondaryButton.300' }} as="div">Go to register</Button>
                 </CustomLink>
               </>
             )}

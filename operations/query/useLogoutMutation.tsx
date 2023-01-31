@@ -1,5 +1,5 @@
-import { useToast } from "@chakra-ui/react"
-import { useEffect, useState } from "react"
+import { useToast } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
 
 export interface ILogoutData {
   data?: {
@@ -9,19 +9,19 @@ export interface ILogoutData {
   }
 }
 
-export function useLogoutMutation() {
+export function useLogoutMutation () {
   const [logoutBoolean, setLogoutBoolean] = useState<boolean>(false)
   const toast = useToast()
 
-  function logout() {
+  function logout () {
     setLogoutBoolean(true)
   }
 
   useEffect(() => {
     if (logoutBoolean) {
-      fetch(process.env.NEXT_PUBLIC_BACKEND_URL ?? "", {
+      fetch(process.env.NEXT_PUBLIC_BACKEND_URL ?? '', {
         method: 'POST',
-        credentials: "include",
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -32,29 +32,29 @@ export function useLogoutMutation() {
             __typename
           }
         }
-        `
-        })
-      }).then(res => res.json()).then(res => {
+        `,
+        }),
+      }).then(() => {
         setLogoutBoolean(false)
         toast({
-          title: "Successfully",
-          description: "You have been successfully logged out!",
-          status: "success",
+          title: 'Successfully',
+          description: 'You have been successfully logged out!',
+          status: 'success',
           duration: 5000,
-          isClosable: true
+          isClosable: true,
         })
       }).catch(err => {
         console.log(err)
         toast({
-          title: "Failure",
-          description: "An unexpected error occurred, please try again later",
-          status: "error",
+          title: 'Failure',
+          description: 'An unexpected error occurred, please try again later',
+          status: 'error',
           duration: 5000,
-          isClosable: true
+          isClosable: true,
         })
       })
     }
-  }, [logoutBoolean])
+  }, [logoutBoolean, toast])
 
   return logout
 }

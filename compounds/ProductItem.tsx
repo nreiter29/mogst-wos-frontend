@@ -35,9 +35,9 @@ const ProductItem: React.FC<IProductItem> = ({ canHover, item }) => {
                         w="full"
                         objectFit="contain"
                         objectPosition="center"
-                        p="3"
+                        p="5"
                         transition=".5s"
-                        _hover={{ p: canHover && '0' }}
+                        _hover={{ p: canHover && '2' }}
                     />
                 </Box>
                 <HStack justify="space-between" align="center" fontSize="sm" p="1" spacing="0" mx="3">

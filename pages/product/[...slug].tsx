@@ -1,11 +1,10 @@
-import { useRouter } from "next/router"
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, Container, Flex, Heading, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Select, SimpleGrid, Skeleton, Text, useDisclosure, VStack } from "@chakra-ui/react"
-import { NextPage } from "next"
-import { IProductsSlug, useProductQuery } from "../../operations/query/useProductQuery"
-import { useEffect, useState } from "react"
-import NextImage from "next/image";
-import { FormattedNumber } from "react-intl"
-import { CustomLink } from "../../utility/CustomLink"
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, Container, Flex, Heading, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Select, SimpleGrid, Skeleton, Text, useDisclosure, VStack } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
+import { useEffect, useMemo, useState } from 'react'
+import { FormattedNumber } from 'react-intl'
+import type { IProductsSlug } from '../../operations/query/useProductQuery'
+import { useProductQuery } from '../../operations/query/useProductQuery'
+import { CustomLink } from '../../utility/CustomLink'
 
 interface IProduct {
   sku: string
@@ -18,17 +17,17 @@ interface IProduct {
   }>
 }
 
-function searchProduct(products: IProductsSlug, sku: string, setProduct: (v: IProduct) => void) {
-  products?.variants.map(v => {
-    if (v.sku == sku) {
+function searchProduct (products: IProductsSlug, sku: string, setProduct: (v: IProduct) => void) {
+  products.variants.map(v => {
+    if (v.sku === sku) {
       setProduct(v)
     }
   })
 }
 
-function checkSku(products: IProductsSlug, selectedValue: string, setSku: (v: string) => void) {
-  products?.variants.map(v => {
-    if (v.name == selectedValue) {
+function checkSku (products: IProductsSlug, selectedValue: string, setSku: (v: string) => void) {
+  products.variants.map(v => {
+    if (v.name === selectedValue) {
       setSku(v.sku)
     }
   })
@@ -44,6 +43,10 @@ const ProductPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   useEffect(() => {
+    refetch()
+  }, [query.sku, refetch])
+
+  useMemo(() => {
     if (products && selectedValue) {
       checkSku(products, selectedValue, setSku)
       if (sku) {
@@ -51,15 +54,13 @@ const ProductPage = () => {
         searchProduct(products, String(query.sku), setProduct)
       }
     }
-    refetch()
-  }, [selectedValue, sku])
+  }, [products, query.sku, query.slug, router, selectedValue, sku])
 
-  useEffect(() => {
+  useMemo(() => {
     if (!isLoading && products) {
       searchProduct(products, String(query.sku), setProduct)
     }
-    refetch()
-  }, [isLoading, products])
+  }, [isLoading, products, query.sku])
 
   return (
     <Container maxW="container.xl" h="95vh" display="flex" alignItems="center">
@@ -77,10 +78,10 @@ const ProductPage = () => {
               <Skeleton isLoaded={!isLoading} rounded="xl">
                 <Image
                   onClick={onOpen}
-                  _hover={{ cursor: "pointer" }}
+                  _hover={{ cursor: 'pointer' }}
                   rounded="xl"
-                  src={product && product.assets && product.assets.length > 0 ? product.assets[0].source : "/macbook.png"}
-                  alt={product && product.assets && product.assets.length > 0 ? product.assets[0].name : "Standard Picture"}
+                  src={product?.assets && product.assets.length > 0 ? product.assets[0].source : '/macbook.png'}
+                  alt={product?.assets && product.assets.length > 0 ? product.assets[0].name : 'Standard Picture'}
                   objectFit="contain"
                   objectPosition="center"
                   width="515px"
@@ -89,7 +90,7 @@ const ProductPage = () => {
               </Skeleton>
               <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay>
-                  <ModalCloseButton color="white" cursor="pointer" />
+                  <ModalCloseButton color="white" cursor="pointer"/>
                 </ModalOverlay>
                 <ModalContent
                   onClick={onClose}
@@ -109,8 +110,8 @@ const ProductPage = () => {
                     p="6"
                   >
                     <Image
-                      src={product && product.assets && product.assets.length > 0 ? product.assets[0].source : "/macbook.png"}
-                      alt={product && product.assets && product.assets.length > 0 ? product.assets[0].name : "Standard Picture"}
+                      src={product?.assets && product.assets.length > 0 ? product.assets[0].source : '/macbook.png'}
+                      alt={product?.assets && product.assets.length > 0 ? product.assets[0].name : 'Standard Picture'}
                       objectFit="contain"
                       objectPosition="center"
                       width="100%"
@@ -127,36 +128,41 @@ const ProductPage = () => {
                   {product?.priceWithTax && (
                     <Text fontSize="xl" color="primaryText.500">
                       <FormattedNumber
-                        value={+product?.priceWithTax / 100}
+                        value={+product.priceWithTax / 100}
                         style="currency"
                         currency="EUR"
                         minimumFractionDigits={2}
-                        maximumFractionDigits={2} />
+                        maximumFractionDigits={2}
+                      />
                     </Text>
                   )}
                 </Flex>
               </Skeleton>
               <Box>
-                {products?.variants && products?.variants.length > 1 && (
-                  <Select placeholder="Select an option" color="primaryText.500" marginBottom="10px" value={product?.name} onChange={v => setSelectedValue(v.target.value)}>
-                    {products?.variants.map((v, index) => {
-                      return (
-                        <option key={v && index}>{v.name}</option>
-                      )
-                    })}
-                  </Select>
-                )}
+                <>
+                  {products?.variants[0].name ?? <Skeleton isLoaded={!isLoading} w="100%" h="40px"/>}
+                  {products?.variants && products.variants.length > 1 && (
+                    <Select placeholder="Select an option" color="primaryText.500" marginBottom="10px" value={product?.name} onChange={v => setSelectedValue(v.target.value)}>
+                      {products.variants.map((v, index) => {
+                        return (
+                          <option key={index}>{v.name}</option>
+                        )
+                      })}
+                    </Select>
+                  )}
+                </>
               </Box>
-              <Button as="div" bgColor="primaryButtonColor.500" color="secondaryText.500" _hover={{ bgColor: "primaryButtonColor.300" }} w="full" mb="25px">Add to shopping cart</Button>
+              <Button as="div" bgColor="primaryButtonColor.500" color="secondaryText.500" _hover={{ bgColor: 'primaryButtonColor.300' }} w="full" mb="25px">Add to shopping cart</Button>
               <Heading as="h3" fontSize="lg" pt="25px" color="primaryText.500">Description</Heading>
+              {products?.description ?? <Skeleton isLoaded={!isLoading} w="100%" h="96px"/>}
               <Text color="primaryText.500">{products?.description}</Text>
             </VStack>
           </SimpleGrid>
         </CardBody>
         <CardFooter>
           <Skeleton isLoaded={!isLoading} w="130px" h="40px" rounded="lg">
-            <CustomLink href="/" _hover={{ textDecor: "none" }}>
-              <Button bgColor="backHome.500" _hover={{ bgColor: "backHome.600" }} color="secondaryText.500" as="div">Back to home</Button>
+            <CustomLink href="/" _hover={{ textDecor: 'none' }}>
+              <Button bgColor="backHome.500" _hover={{ bgColor: 'backHome.600' }} color="secondaryText.500" as="div">Back to home</Button>
             </CustomLink>
           </Skeleton>
         </CardFooter>

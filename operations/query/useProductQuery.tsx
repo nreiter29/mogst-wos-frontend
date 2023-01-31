@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react"
+import request, { gql } from 'graphql-request'
+import { useCallback, useEffect, useState } from 'react'
 
 export interface IProductsSlug {
   name: string
@@ -15,43 +16,38 @@ export interface IProductsSlug {
   }>
 }
 
-export function useProductQuery(slug: string) {
-  const [refetchBoolean, setRefetchBoolean] = useState<boolean>()
+export function useProductQuery (slug: string) {
   const [products, setProducts] = useState<IProductsSlug>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
-  function refetch() {
-    setRefetchBoolean(!refetchBoolean)
-  }
-
-  useEffect(() => {
-    fetch(process.env.NEXT_PUBLIC_BACKEND_URL ?? "", {
-      method: 'POST',
-      credentials: "include",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query: `query Product {
-          product(slug: "${slug}") {
-            description
+  const refetch = useCallback(() => {
+    const query = gql`
+      query Product {
+        product(slug: "${slug}") {
+          description
+          name
+          variants {
+            sku
             name
-            variants {
-              sku
+            stockLevel
+            priceWithTax
+            assets {
               name
-              stockLevel
-              priceWithTax
-              assets {
-                name
-                source
-              }
+              source
             }
           }
         }
-`
-      })
-    }).then(res => res.json()).then(res => (setProducts(res.data.product), setIsLoading(false))).catch(err => console.log(err))
-  }, [refetchBoolean])
+      }
+    `
+
+    request(process.env.NEXT_PUBLIC_BACKEND_URL ?? '', query, { credentials: 'include' })
+      .then(res => { setProducts(res.product); setIsLoading(false) })
+      .catch(err => console.log(err))
+  }, [slug])
+
+  useEffect(() => {
+    refetch()
+  }, [refetch])
 
   return { products, refetch, isLoading }
 }
