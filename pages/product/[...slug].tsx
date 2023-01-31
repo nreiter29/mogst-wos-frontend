@@ -75,7 +75,12 @@ const ProductPage = () => {
         <CardBody display="flex" alignContent="center" justifyContent="space-between">
           <SimpleGrid columns={2} spacing="2" alignContent="space-between" w="full">
             <VStack align="left" w="full">
-              <Skeleton isLoaded={!isLoading} rounded="xl">
+              <Skeleton
+                isLoaded={!isLoading}
+                rounded="xl"
+                width="515px"
+                height="515px"
+              >
                 <Image
                   onClick={onOpen}
                   _hover={{ cursor: 'pointer' }}
@@ -139,10 +144,10 @@ const ProductPage = () => {
                 </Flex>
               </Skeleton>
               <Box>
-                <>
-                  {products?.variants[0].name ?? <Skeleton isLoaded={!isLoading} w="100%" h="40px"/>}
+                <Box mb="10px">
+                  {products?.variants.length ? '' : <Skeleton isLoaded={!isLoading} w="100%" h="40px"/>}
                   {products?.variants && products.variants.length > 1 && (
-                    <Select placeholder="Select an option" color="primaryText.500" marginBottom="10px" value={product?.name} onChange={v => setSelectedValue(v.target.value)}>
+                    <Select placeholder="Select an option" color="primaryText.500" value={product?.name} onChange={v => setSelectedValue(v.target.value)}>
                       {products.variants.map((v, index) => {
                         return (
                           <option key={index}>{v.name}</option>
@@ -150,7 +155,7 @@ const ProductPage = () => {
                       })}
                     </Select>
                   )}
-                </>
+                </Box>
               </Box>
               <Button as="div" bgColor="primaryButtonColor.500" color="secondaryText.500" _hover={{ bgColor: 'primaryButtonColor.300' }} w="full" mb="25px">Add to shopping cart</Button>
               <Heading as="h3" fontSize="lg" pt="25px" color="primaryText.500">Description</Heading>
