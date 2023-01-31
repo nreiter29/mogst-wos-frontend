@@ -33,7 +33,7 @@ const Custom404 = () => {
             display="flex"
             alignItems="center"
             gap="2"
-          ><TbError404 fontSize="50px" />Page not found
+          ><TbError404 fontSize="50px"/>Page not found
           </Heading>
         </CardHeader>
         <CardBody>

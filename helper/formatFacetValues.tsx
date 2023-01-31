@@ -1,4 +1,4 @@
-export function formatFacetValues(facetValues: Array<{
+export function formatFacetValues (facetValues: Array<{
   facetValue: {
     name: string
     id: string

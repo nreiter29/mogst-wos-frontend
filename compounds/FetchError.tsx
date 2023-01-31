@@ -6,7 +6,7 @@ const FetchError = () => {
     <Container h="95vh" maxW="container.xl" display="flex" alignItems="center">
       <Card w="100%">
         <CardHeader>
-          <Heading as="h2" fontSize="4xl" color="red.700" display="flex" alignItems="center" gap="2"><BiErrorAlt />Oh, oh, an unexpected error has occurred</Heading>
+          <Heading as="h2" fontSize="4xl" color="red.700" display="flex" alignItems="center" gap="2"><BiErrorAlt/>Oh, oh, an unexpected error has occurred</Heading>
         </CardHeader>
         <CardBody>
           <Text color="red.500">Failed to fetch</Text>
