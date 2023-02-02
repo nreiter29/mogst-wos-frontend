@@ -2,4 +2,4 @@
   "extends": [
       "./node_modules/@alpin11/lint/.eslintrc"
   ]
-}
+} 
