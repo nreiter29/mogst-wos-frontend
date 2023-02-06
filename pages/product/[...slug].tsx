@@ -1,12 +1,17 @@
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, Container, Flex, Heading, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Select, SimpleGrid, Skeleton, Text, useDisclosure, VStack } from '@chakra-ui/react'
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, Container, Flex, Heading, HStack, IconButton, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Select, SimpleGrid, Skeleton, Text, useDisclosure, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { FormattedNumber } from 'react-intl'
 import type { IProductsSlug } from '../../operations/query/useProductQuery'
 import { useProductQuery } from '../../operations/query/useProductQuery'
 import { CustomLink } from '../../utility/CustomLink'
+import { BsPlus } from 'react-icons/bs'
+import { HiMinusSm } from 'react-icons/hi'
+import { useAddItemToOrderMutation } from '../../operations/mutation/useAddItemToOrderMutation'
+import type { IActiveCustomerData } from '../../operations/query/useActiveCustomerQuery'
 
 interface IProduct {
+  id: number
   sku: string
   name: string
   stockLevel: string
@@ -33,7 +38,7 @@ function checkSku (products: IProductsSlug, selectedValue: string, setSku: (v: s
   })
 }
 
-const ProductPage = () => {
+const ProductPage: React.FC<{activeCustomerData?: IActiveCustomerData, refetch: () => void}> = ({ activeCustomerData, refetch: refetchActiveCustomerData }) => {
   const router = useRouter()
   const query = router.query
   const { products, refetch, isLoading } = useProductQuery(String(query.slug))
@@ -41,9 +46,13 @@ const ProductPage = () => {
   const [selectedValue, setSelectedValue] = useState<string>()
   const [sku, setSku] = useState<string | undefined>(undefined)
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [quantity, setQuantity] = useState<number>(1)
+  const { addItem } = useAddItemToOrderMutation()
+  const [isButtonEnabled, setIsButtonEnabled] = useState<boolean>(false)
 
   useEffect(() => {
     refetch()
+    refetchActiveCustomerData()
   }, [query.sku, refetch])
 
   useMemo(() => {
@@ -61,6 +70,15 @@ const ProductPage = () => {
       searchProduct(products, String(query.sku), setProduct)
     }
   }, [isLoading, products, query.sku])
+
+  useEffect(() => {
+    const checkIfButtonIsEnabled = () => {
+      if (query.sku !== undefined && activeCustomerData?.activeCustomer !== null) {
+        setIsButtonEnabled(true)
+      } else setIsButtonEnabled(false)
+    }
+    checkIfButtonIsEnabled()
+  }, [query.sku, refetchActiveCustomerData, activeCustomerData?.activeCustomer])
 
   return (
     <Container maxW="container.xl" h="95vh" display="flex" alignItems="center">
@@ -129,7 +147,7 @@ const ProductPage = () => {
             <VStack w="full" align="left" spacing="0">
               <Skeleton isLoaded={!isLoading} h="30px" w="full" mb="10px">
                 <Flex align="center" justify="space-between" w="full" mb="10px">
-                  <Heading fontSize="xl" color="primaryText.500">{products?.name}</Heading>
+                  <Heading fontSize="2xl" color="primaryText.500">{products?.name}</Heading>
                   {product?.priceWithTax && (
                     <Text fontSize="xl" color="primaryText.500">
                       <FormattedNumber
@@ -144,30 +162,97 @@ const ProductPage = () => {
                 </Flex>
               </Skeleton>
               <Box>
-                <Box mb="10px">
-                  {products?.variants.length ? '' : <Skeleton isLoaded={!isLoading} w="100%" h="40px"/>}
+                <Box mb="5px">
+                  {products?.variants && products.variants.length ? '' : <><Skeleton isLoaded={!isLoading} h="22px" w="60px" mb="1"/><Skeleton isLoaded={!isLoading} w="100%" h="40px"/></>}
                   {products?.variants && products.variants.length > 1 && (
-                    <Select placeholder="Select an option" color="primaryText.500" value={product?.name} onChange={v => setSelectedValue(v.target.value)}>
-                      {products.variants.map((v, index) => {
-                        return (
-                          <option key={index}>{v.name}</option>
-                        )
-                      })}
-                    </Select>
+                    <>
+                      <Heading as="h3" fontSize="lg" color="primaryText.500" mb="1">Variant</Heading>
+                      <Select
+                        placeholder="Select an option"
+                        color="primaryText.500"
+                        value={product?.name}
+                        onChange={v => setSelectedValue(v.target.value)}
+                      >
+                        {products.variants.map((v, index) => {
+                          return (
+                            <option key={index}>{v.name}</option>
+                          )
+                        })}
+                      </Select>
+                    </>
                   )}
                 </Box>
+                <Box mb="10px">
+                  <Skeleton isLoaded={!isLoading} h="22px" w="70px" mb="1">
+                    <Heading as="h3" fontSize="lg" color="primaryText.500" mb="1">Quantity</Heading>
+                  </Skeleton>
+                  <Skeleton isLoaded={!isLoading} w="125px" h="40px">
+                    <HStack spacing="0" w="135px">
+                      <IconButton
+                        bgColor="secondaryButton.400"
+                        color="secondaryText.500"
+                        icon={<HiMinusSm size="40px"/>}
+                        onClick={() => setQuantity(quantity - 1)}
+                        isDisabled={quantity === 1}
+                        aria-label=""
+                        roundedRight="none"
+                      />
+                      <Input
+                        color="primaryText.500"
+                        value={quantity}
+                        textAlign="center"
+                        rounded="none"
+                        borderX="none"
+                        borderColor="secondaryButton.200"
+                        onChange={e => setQuantity(Number(e.target.value))}
+                      />
+                      <IconButton
+                        color="secondaryText.500"
+                        bgColor="secondaryButton.400"
+                        icon={<BsPlus size="40px"/>}
+                        onClick={() => setQuantity(quantity + 1)}
+                        aria-label=""
+                        isDisabled={quantity === 20}
+                        roundedLeft="none"
+                      />
+                    </HStack>
+                  </Skeleton>
+                </Box>
               </Box>
-              <Button as="div" bgColor="primaryButtonColor.500" color="secondaryText.500" _hover={{ bgColor: 'primaryButtonColor.300' }} w="full" mb="25px">Add to shopping cart</Button>
-              <Heading as="h3" fontSize="lg" pt="25px" color="primaryText.500">Description</Heading>
-              {products?.description ?? <Skeleton isLoaded={!isLoading} w="100%" h="96px"/>}
-              <Text color="primaryText.500">{products?.description}</Text>
+              <Button
+                bgColor="primaryButtonColor.500"
+                color="secondaryText.500"
+                _hover={{ bgColor: 'primaryButtonColor.300' }}
+                w="full"
+                isDisabled={!isButtonEnabled}
+                onClick={() => addItem(product?.id ?? 0, quantity, product?.name)}
+              >Add to shopping cart
+              </Button>
+              {!isButtonEnabled && <Heading as="h4" fontSize="md" color="red" pt="1">You must be logged in to add anything to the cart!</Heading>}
+              <Skeleton isLoaded={!isLoading} w="100%" h="100px">
+                <Heading
+                  as="h3"
+                  fontSize="lg"
+                  mt="25px"
+                  mb="1"
+                  color="primaryText.500"
+                >Description
+                </Heading>
+                <Text color="primaryText.500" lineHeight="18px">{products?.description}</Text>
+              </Skeleton>
             </VStack>
           </SimpleGrid>
         </CardBody>
         <CardFooter>
           <Skeleton isLoaded={!isLoading} w="130px" h="40px" rounded="lg">
             <CustomLink href="/" _hover={{ textDecor: 'none' }}>
-              <Button bgColor="backHome.500" _hover={{ bgColor: 'backHome.600' }} color="secondaryText.500" as="div">Back to home</Button>
+              <Button
+                bgColor="backHome.500"
+                _hover={{ bgColor: 'backHome.600' }}
+                color="secondaryText.500"
+                as="div"
+              >Back to home
+              </Button>
             </CustomLink>
           </Skeleton>
         </CardFooter>

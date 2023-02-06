@@ -5,6 +5,7 @@ export interface IProductsSlug {
   name: string
   description: string
   variants: Array<{
+    id: number
     sku: string
     name: string
     stockLevel: string
@@ -27,6 +28,7 @@ export function useProductQuery (slug: string) {
           description
           name
           variants {
+            id
             sku
             name
             stockLevel

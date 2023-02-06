@@ -9,11 +9,11 @@ export interface IActiveCustomerData {
     customFields: {
       salutation: string
     }
-  }
+  } | null
 }
 
 export function useActiveCustomerQuery () {
-  const [activeCustomerData, setActiveCustomerData] = useState<IActiveCustomerData>()
+  const [activeCustomerData, setActiveCustomerData] = useState<IActiveCustomerData | undefined>()
 
   const refetch = useCallback(() => {
     const graphQLClient = new GraphQLClient(process.env.NEXT_PUBLIC_BACKEND_URL ?? '', { credentials: 'include' })

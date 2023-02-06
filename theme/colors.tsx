@@ -1,6 +1,6 @@
 import Color from 'color'
 
-function getShades(color: string) {
+function getShades (color: string) {
   return {
     50: Color(color).negate().darken(0.9).negate().hex(),
     100: Color(color).negate().darken(0.8).negate().hex(),
@@ -25,11 +25,11 @@ function getShades(color: string) {
 }
 
 export const colors = {
-  primaryText: getShades("#43464B"),
-  secondaryText: getShades("#E9F1F2"),
-  primaryBackground: getShades("#FFF9F5"),
-  primaryButtonColor: getShades("#735B4C"),
-  secondaryButton: getShades("#6A546E"),
-  backHome: getShades("#856B10"),
-  selectionColor: getShades("#DECAC8"),
+  primaryText: getShades('#43464B'),
+  secondaryText: getShades('#E9F1F2'),
+  primaryBackground: getShades('#FFF9F5'),
+  primaryButtonColor: getShades('#735B4C'),
+  secondaryButton: getShades('#6A546E'),
+  backHome: getShades('#856B10'),
+  selectionColor: getShades('#DECAC8'),
 }

@@ -1,5 +1,6 @@
 {
     "name": "mogst-wos-frontend",
+    "author": "Noah Reiter <n.reiter@alpin11.com> (https://www.alpin11.com/)",
     "version": "0.1.0",
     "private": true,
     "scripts": {
