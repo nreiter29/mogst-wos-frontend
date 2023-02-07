@@ -1,14 +1,14 @@
 import { Box, Button, Card, CardBody, CardFooter, CardHeader, Container, Flex, Heading, HStack, IconButton, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Select, SimpleGrid, Skeleton, Text, useDisclosure, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
+import { BsPlus } from 'react-icons/bs'
+import { HiMinusSm } from 'react-icons/hi'
 import { FormattedNumber } from 'react-intl'
+import { useAddItemToOrderMutation } from '../../operations/mutation/useAddItemToOrderMutation'
+import type { IActiveCustomerData } from '../../operations/query/useActiveCustomerQuery'
 import type { IProductsSlug } from '../../operations/query/useProductQuery'
 import { useProductQuery } from '../../operations/query/useProductQuery'
 import { CustomLink } from '../../utility/CustomLink'
-import { BsPlus } from 'react-icons/bs'
-import { HiMinusSm } from 'react-icons/hi'
-import { useAddItemToOrderMutation } from '../../operations/mutation/useAddItemToOrderMutation'
-import type { IActiveCustomerData } from '../../operations/query/useActiveCustomerQuery'
 
 interface IProduct {
   id: number
@@ -38,7 +38,7 @@ function checkSku (products: IProductsSlug, selectedValue: string, setSku: (v: s
   })
 }
 
-const ProductPage: React.FC<{activeCustomerData?: IActiveCustomerData, refetch: () => void}> = ({ activeCustomerData, refetch: refetchActiveCustomerData }) => {
+const ProductPage: React.FC<{activeCustomerData?: IActiveCustomerData, refetch: () => void, refetchActiveCustomer: () => void}> = ({ activeCustomerData, refetch: refetchActiveCustomerData, refetchActiveCustomer }) => {
   const router = useRouter()
   const query = router.query
   const { products, refetch, isLoading } = useProductQuery(String(query.slug))
@@ -225,10 +225,10 @@ const ProductPage: React.FC<{activeCustomerData?: IActiveCustomerData, refetch: 
                 _hover={{ bgColor: 'primaryButtonColor.300' }}
                 w="full"
                 isDisabled={!isButtonEnabled}
-                onClick={() => addItem(product?.id ?? 0, quantity, product?.name)}
+                onClick={() => { addItem(product?.id ?? 0, quantity, product?.name); refetchActiveCustomer() }}
               >Add to shopping cart
               </Button>
-              {!isButtonEnabled && <Heading as="h4" fontSize="md" color="red" pt="1">You must be logged in to add anything to the cart!</Heading>}
+              {activeCustomerData?.activeCustomer === null && <Heading as="h4" fontSize="md" color="red" pt="1">You must be logged in to add anything to the cart!</Heading>}
               <Skeleton isLoaded={!isLoading} w="100%" h="100px">
                 <Heading
                   as="h3"

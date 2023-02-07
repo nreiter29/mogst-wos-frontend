@@ -24,7 +24,7 @@ const Custom404 = () => {
       display="flex"
       alignItems="center"
     >
-      <Card w="100%">
+      <Card w="100%" bgColor="primaryBackground.500">
         <CardHeader>
           <Heading
             as="h2"

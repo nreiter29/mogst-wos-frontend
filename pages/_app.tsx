@@ -5,7 +5,9 @@ import { useState } from 'react'
 import { IntlProvider } from 'react-intl'
 import Footer from '../compounds/Footer'
 import Navbar from '../compounds/Navbar'
+import { useLoginMutation } from '../operations/mutation/useLoginMutation'
 import { useActiveCustomerQuery } from '../operations/query/useActiveCustomerQuery'
+import { useActiveOrderCart } from '../operations/query/useActiveOrderCart'
 import { useFetchVariants } from '../operations/query/useFetchVariants'
 import { Fonts, theme } from '../theme/theme'
 
@@ -14,6 +16,8 @@ const App = ({ Component, pageProps }: AppProps) => {
   const [queryClient] = useState(() => new QueryClient())
   const [closeSearchResults, setCloseSearchResults] = useState(true)
   const { activeCustomerData, refetch } = useActiveCustomerQuery()
+  const { activeOrderCartData, refetchActiveOrderCartData } = useActiveOrderCart()
+  const { getData, loginSuccesfully, isLoginDataFalse } = useLoginMutation()
 
   return (
     <IntlProvider locale="de" onError={() => { }}>
@@ -22,14 +26,20 @@ const App = ({ Component, pageProps }: AppProps) => {
           <Fonts/>
           {err === 8 && (
             <Navbar
+              loginSuccesfully={loginSuccesfully}
               closeSearchResults={closeSearchResults}
               setCloseSearchResults={setCloseSearchResults}
               isLoading={areVariantsLoading}
               activeCustomerData={activeCustomerData}
               refetch={refetch}
+              activeOrderCartData={activeOrderCartData}
+              refetchActiveOrderCartData={refetchActiveOrderCartData}
             />
           )}
           <Component
+            getData={getData}
+            loginSuccesfully={loginSuccesfully}
+            isLoginDataFalse={isLoginDataFalse}
             activeCustomerData={activeCustomerData}
             refetch={refetch}
             {...pageProps}
@@ -40,6 +50,8 @@ const App = ({ Component, pageProps }: AppProps) => {
             pageNumber={pageNumber}
             setPageNumber={setPageNumber}
             err={err}
+            activeOrderCartData={activeOrderCartData}
+            refetchActiveOrderCartData={refetchActiveOrderCartData}
           />
           <Footer/>
         </ChakraProvider>

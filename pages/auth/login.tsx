@@ -2,7 +2,6 @@ import { Box, Button, Card, CardBody, CardFooter, CardHeader, Checkbox, Containe
 import { useEffect } from 'react'
 import type { SubmitHandler } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
-import { useLoginMutation } from '../../operations/mutation/useLoginMutation'
 import type { IActiveCustomerData } from '../../operations/query/useActiveCustomerQuery'
 import { CustomLink } from '../../utility/CustomLink'
 
@@ -12,14 +11,21 @@ export interface ILoginForm {
   rememberMe: boolean
 }
 
-const Register: React.FC<{activeCustomerData: IActiveCustomerData | undefined, refetch: () => void}> = ({ activeCustomerData, refetch }) => {
+const Register: React.FC<{
+  activeCustomerData: IActiveCustomerData | undefined
+  refetch: () => void
+  refetchActiveOrderCartData: () => void
+  getData: (input: ILoginForm) => void
+  loginSuccesfully: boolean
+  isLoginDataFalse: boolean
+}> = ({ activeCustomerData, refetch, refetchActiveOrderCartData, getData, loginSuccesfully, isLoginDataFalse }) => {
   const { register, handleSubmit } = useForm<ILoginForm>()
-  const { getData, loginSuccesfully, isLoginDataFalse } = useLoginMutation()
   const onSubmit: SubmitHandler<ILoginForm> = data => getData(data)
 
   useEffect(() => {
     if (loginSuccesfully) {
       refetch()
+      refetchActiveOrderCartData()
     }
   }, [loginSuccesfully])
 
@@ -58,7 +64,14 @@ const Register: React.FC<{activeCustomerData: IActiveCustomerData | undefined, r
                 </HStack>
                 <Box>
                   <Text color="red">{isLoginDataFalse && 'E-Mail or password is wrong!'}</Text>
-                  <Button type="submit" w="50%" bgColor="primaryButtonColor.500" color="secondaryText.500" _hover={{ bgColor: 'primaryButtonColor.300' }}>Login</Button>
+                  <Button
+                    type="submit"
+                    w="50%"
+                    bgColor="primaryButtonColor.500"
+                    color="secondaryText.500"
+                    _hover={{ bgColor: 'primaryButtonColor.300' }}
+                  >Login
+                  </Button>
                 </Box>
               </form>
               )}
