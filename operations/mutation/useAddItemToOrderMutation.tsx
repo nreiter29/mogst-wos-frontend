@@ -1,7 +1,7 @@
 import { useToast } from '@chakra-ui/react'
 import { gql, GraphQLClient } from 'graphql-request'
 
-export function useAddItemToOrderMutation () {
+export function useAddItemToOrderMutation (refetchActiveOrderCartData: () => void) {
   const graphQLClient = new GraphQLClient(process.env.NEXT_PUBLIC_BACKEND_URL ?? '', { credentials: 'include' })
   const toast = useToast()
 
@@ -37,13 +37,16 @@ export function useAddItemToOrderMutation () {
     }
   }
 }
-    `).then(() => toast({
-      title: 'Success',
-      description: `${quantity} x ${productName ?? ''} successfully added to the cart!`,
-      status: 'success',
-      duration: 5000,
-      isClosable: true,
-    })).catch(err => {
+    `).then(() => {
+      refetchActiveOrderCartData()
+      toast({
+        title: 'Success',
+        description: `${quantity} x ${productName ?? ''} successfully added to the cart!`,
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      })
+    }).catch(err => {
       toast({
         title: 'Failure',
         description: 'An unexpected error occurred, please try again later',

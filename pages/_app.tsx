@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { IntlProvider } from 'react-intl'
 import Footer from '../compounds/Footer'
 import Navbar from '../compounds/Navbar'
+import { useAddItemToOrderMutation } from '../operations/mutation/useAddItemToOrderMutation'
 import { useLoginMutation } from '../operations/mutation/useLoginMutation'
 import { useActiveCustomerQuery } from '../operations/query/useActiveCustomerQuery'
 import { useActiveOrderCart } from '../operations/query/useActiveOrderCart'
@@ -18,6 +19,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   const { activeCustomerData, refetch } = useActiveCustomerQuery()
   const { activeOrderCartData, refetchActiveOrderCartData } = useActiveOrderCart()
   const { getData, loginSuccesfully, isLoginDataFalse } = useLoginMutation()
+  const { addItem } = useAddItemToOrderMutation(refetchActiveOrderCartData)
 
   return (
     <IntlProvider locale="de" onError={() => { }}>
@@ -38,6 +40,7 @@ const App = ({ Component, pageProps }: AppProps) => {
           )}
           <Component
             getData={getData}
+            addItem={addItem}
             loginSuccesfully={loginSuccesfully}
             isLoginDataFalse={isLoginDataFalse}
             activeCustomerData={activeCustomerData}

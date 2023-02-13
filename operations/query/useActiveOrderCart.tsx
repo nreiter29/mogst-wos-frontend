@@ -9,22 +9,25 @@ export interface IActiveOrderCartVariants {
     subTotalWithTax: number
     totalQuantity: number
     lines: Array<{
-      id: number
-      productVariant: Array<{
+      quantity: number
+      productVariant: {
+        id: number
         price: number
+        priceWithTax: number
         name: string
         sku: string
         assets: Array<{
+          name: string
           source: string
         }>
-        product: Array<{
+        product: {
           name: string
           slug: string
-        }>
-      }>
-      unitPrice: number
+        }
+      }
       linePrice: number
-      quantity: number
+      linePriceWithTax: number
+      lineTax: number
     }>
   } | null
 }
@@ -43,13 +46,15 @@ export function useActiveOrderCart () {
     subTotalWithTax
     totalQuantity
     lines {
-      id
       quantity
       productVariant {
+        id
         price
+        priceWithTax
         name
         sku
         assets {
+          name
           source
         }
         product {

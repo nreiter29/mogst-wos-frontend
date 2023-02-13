@@ -1,11 +1,11 @@
 import { Box, Button, Card, CardBody, CardFooter, CardHeader, Container, Flex, Heading, HStack, IconButton, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Select, SimpleGrid, Skeleton, Text, useDisclosure, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { BsPlus } from 'react-icons/bs'
 import { HiMinusSm } from 'react-icons/hi'
 import { FormattedNumber } from 'react-intl'
-import { useAddItemToOrderMutation } from '../../operations/mutation/useAddItemToOrderMutation'
 import type { IActiveCustomerData } from '../../operations/query/useActiveCustomerQuery'
+import type { IActiveOrderCartVariants } from '../../operations/query/useActiveOrderCart'
 import type { IProductsSlug } from '../../operations/query/useProductQuery'
 import { useProductQuery } from '../../operations/query/useProductQuery'
 import { CustomLink } from '../../utility/CustomLink'
@@ -38,7 +38,19 @@ function checkSku (products: IProductsSlug, selectedValue: string, setSku: (v: s
   })
 }
 
-const ProductPage: React.FC<{activeCustomerData?: IActiveCustomerData, refetch: () => void, refetchActiveCustomer: () => void}> = ({ activeCustomerData, refetch: refetchActiveCustomerData, refetchActiveCustomer }) => {
+const ProductPage: React.FC<{
+  activeCustomerData?: IActiveCustomerData
+  refetch: () => void
+  refetchActiveOrderCartData: () => void
+  addItem: (productVariantId: number, quantity: number, productName?: string) => void
+  activeOrderCartData: IActiveOrderCartVariants | undefined
+}> = ({
+  activeCustomerData,
+  refetch: refetchActiveCustomerData,
+  refetchActiveOrderCartData,
+  addItem,
+  activeOrderCartData,
+}) => {
   const router = useRouter()
   const query = router.query
   const { products, refetch, isLoading } = useProductQuery(String(query.slug))
@@ -47,7 +59,6 @@ const ProductPage: React.FC<{activeCustomerData?: IActiveCustomerData, refetch: 
   const [sku, setSku] = useState<string | undefined>(undefined)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [quantity, setQuantity] = useState<number>(1)
-  const { addItem } = useAddItemToOrderMutation()
   const [isButtonEnabled, setIsButtonEnabled] = useState<boolean>(false)
 
   useEffect(() => {
@@ -79,6 +90,17 @@ const ProductPage: React.FC<{activeCustomerData?: IActiveCustomerData, refetch: 
     }
     checkIfButtonIsEnabled()
   }, [query.sku, refetchActiveCustomerData, activeCustomerData?.activeCustomer])
+  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
+
+  useEffect(() => {
+    activeOrderCartData?.activeOrder?.lines.map(e => {
+      if (e.productVariant.sku === query.sku) {
+        if (e.quantity >= 20 || (e.quantity + quantity) >= 20) {
+          setIsButtonDisabled(true)
+        }
+      }
+    })
+  }, [activeOrderCartData?.activeOrder?.lines, quantity, query.sku])
 
   return (
     <Container maxW="container.xl" h="95vh" display="flex" alignItems="center">
@@ -212,7 +234,7 @@ const ProductPage: React.FC<{activeCustomerData?: IActiveCustomerData, refetch: 
                         icon={<BsPlus size="40px"/>}
                         onClick={() => setQuantity(quantity + 1)}
                         aria-label=""
-                        isDisabled={quantity === 20}
+                        isDisabled={isButtonDisabled}
                         roundedLeft="none"
                       />
                     </HStack>
@@ -225,7 +247,7 @@ const ProductPage: React.FC<{activeCustomerData?: IActiveCustomerData, refetch: 
                 _hover={{ bgColor: 'primaryButtonColor.300' }}
                 w="full"
                 isDisabled={!isButtonEnabled}
-                onClick={() => { addItem(product?.id ?? 0, quantity, product?.name); refetchActiveCustomer() }}
+                onClick={() => addItem(product?.id ?? 0, quantity, product?.name)}
               >Add to shopping cart
               </Button>
               {activeCustomerData?.activeCustomer === null && <Heading as="h4" fontSize="md" color="red" pt="1">You must be logged in to add anything to the cart!</Heading>}
