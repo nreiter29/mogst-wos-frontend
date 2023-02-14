@@ -44,12 +44,14 @@ const ProductPage: React.FC<{
   refetchActiveOrderCartData: () => void
   addItem: (productVariantId: number, quantity: number, productName?: string) => void
   activeOrderCartData: IActiveOrderCartVariants | undefined
+  loginSuccesfully: boolean
 }> = ({
   activeCustomerData,
   refetch: refetchActiveCustomerData,
   refetchActiveOrderCartData,
   addItem,
   activeOrderCartData,
+  loginSuccesfully,
 }) => {
   const router = useRouter()
   const query = router.query
@@ -102,6 +104,7 @@ const ProductPage: React.FC<{
         if (quantity >= 20) {
           setIsButtonDisabled(true)
           setIsButtonEnabled(true)
+          console.log('test2')
         } else {
           setIsButtonDisabled(false)
           setIsButtonEnabled(true)
@@ -110,13 +113,16 @@ const ProductPage: React.FC<{
         if (quantity >= 20) {
           setIsButtonDisabled(true)
           setIsButtonEnabled(true)
-        } else {
+        } else if (loginSuccesfully) {
           setIsButtonDisabled(false)
           setIsButtonEnabled(true)
+        } else {
+          setIsButtonDisabled(true)
+          setIsButtonEnabled(false)
         }
       }
     }
-  }, [activeCustomerData?.activeCustomer, activeOrderCartData?.activeOrder?.lines, product?.id, quantity, query.sku])
+  }, [activeCustomerData?.activeCustomer, activeOrderCartData?.activeOrder?.lines, loginSuccesfully, product?.id, quantity, query.sku])
 
   return (
     <Container maxW="container.xl" h="95vh" display="flex" alignItems="center">
