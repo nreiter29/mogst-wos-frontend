@@ -10,6 +10,7 @@ export interface IActiveOrderCartVariants {
     totalQuantity: number
     lines: Array<{
       quantity: number
+      id: number
       productVariant: {
         id: number
         price: number
@@ -46,6 +47,7 @@ export function useActiveOrderCart () {
     subTotalWithTax
     totalQuantity
     lines {
+      id
       quantity
       productVariant {
         id

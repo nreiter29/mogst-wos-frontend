@@ -60,6 +60,7 @@ const ProductPage: React.FC<{
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [quantity, setQuantity] = useState<number>(1)
   const [isButtonEnabled, setIsButtonEnabled] = useState<boolean>(false)
+  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
 
   useEffect(() => {
     refetch()
@@ -83,24 +84,39 @@ const ProductPage: React.FC<{
   }, [isLoading, products, query.sku])
 
   useEffect(() => {
-    const checkIfButtonIsEnabled = () => {
-      if (query.sku !== undefined && activeCustomerData?.activeCustomer !== null) {
-        setIsButtonEnabled(true)
-      } else setIsButtonEnabled(false)
-    }
-    checkIfButtonIsEnabled()
-  }, [query.sku, refetchActiveCustomerData, activeCustomerData?.activeCustomer])
-  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
-
-  useEffect(() => {
-    activeOrderCartData?.activeOrder?.lines.map(e => {
-      if (e.productVariant.sku === query.sku) {
-        if (e.quantity >= 20 || (e.quantity + quantity) >= 20) {
+    if (activeOrderCartData?.activeOrder?.lines.find(e => e.productVariant.id === product?.id)) {
+      if ((Number(activeOrderCartData.activeOrder.lines.find(e => e.productVariant.id === product?.id)?.quantity) + quantity) >= 20) {
+        if (((Number(activeOrderCartData.activeOrder.lines.find(e => e.productVariant.id === product?.id)?.quantity) + quantity) >= 21) || (Number(activeOrderCartData.activeOrder.lines.find(e => e.productVariant.id === product?.id)?.quantity) === 20)) {
+          setIsButtonEnabled(false)
           setIsButtonDisabled(true)
+        } else if ((Number(activeOrderCartData.activeOrder.lines.find(e => e.productVariant.id === product?.id)?.quantity) + quantity) >= 20) {
+          setIsButtonDisabled(true)
+        } else if (Number(activeOrderCartData.activeOrder.lines.find(e => e.productVariant.id === product?.id)?.quantity) === 20) {
+          setIsButtonEnabled(true)
         }
       }
-    })
-  }, [activeOrderCartData?.activeOrder?.lines, quantity, query.sku])
+    } else {
+      if (query.sku === undefined && activeCustomerData?.activeCustomer === null) {
+        setIsButtonDisabled(true)
+        setIsButtonEnabled(true)
+        if (quantity >= 20) {
+          setIsButtonDisabled(true)
+          setIsButtonEnabled(true)
+        } else {
+          setIsButtonDisabled(false)
+          setIsButtonEnabled(true)
+        }
+      } else {
+        if (quantity >= 20) {
+          setIsButtonDisabled(true)
+          setIsButtonEnabled(true)
+        } else {
+          setIsButtonDisabled(false)
+          setIsButtonEnabled(true)
+        }
+      }
+    }
+  }, [activeCustomerData?.activeCustomer, activeOrderCartData?.activeOrder?.lines, product?.id, quantity, query.sku])
 
   return (
     <Container maxW="container.xl" h="95vh" display="flex" alignItems="center">
@@ -226,7 +242,7 @@ const ProductPage: React.FC<{
                         rounded="none"
                         borderX="none"
                         borderColor="secondaryButton.200"
-                        onChange={e => setQuantity(Number(e.target.value))}
+                        onChange={() => void 0}
                       />
                       <IconButton
                         color="secondaryText.500"
@@ -247,7 +263,7 @@ const ProductPage: React.FC<{
                 _hover={{ bgColor: 'primaryButtonColor.300' }}
                 w="full"
                 isDisabled={!isButtonEnabled}
-                onClick={() => addItem(product?.id ?? 0, quantity, product?.name)}
+                onClick={() => { addItem(product?.id ?? 0, quantity, product?.name); setQuantity(1) }}
               >Add to shopping cart
               </Button>
               {activeCustomerData?.activeCustomer === null && <Heading as="h4" fontSize="md" color="red" pt="1">You must be logged in to add anything to the cart!</Heading>}
