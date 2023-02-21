@@ -17,9 +17,9 @@ export interface IActiveOrderCartVariants {
         priceWithTax: number
         name: string
         sku: string
-        assets: Array<{
-          name: string
-          source: string
+        assets?: Array<{
+          name?: string
+          source?: string
         }>
         product: {
           name: string

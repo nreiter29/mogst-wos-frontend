@@ -1,15 +1,15 @@
-import { Text, Card, CardBody, CardFooter, CardHeader, Container, Heading, HStack, Stack, VStack, Box, Input, IconButton, Divider, Button, Skeleton } from '@chakra-ui/react'
-import type { IActiveOrderCartVariants } from '../../operations/query/useActiveOrderCart'
+import { Button, Card, CardBody, CardFooter, CardHeader, Container, Divider, Heading, HStack, IconButton, Image, Input, Skeleton, Stack, Text, VStack } from '@chakra-ui/react'
+import NextImage from 'next/legacy/image'
 import type React from 'react'
 import { useEffect, useState } from 'react'
-import NextImage from 'next/legacy/image'
-import { FormattedNumber } from 'react-intl'
+import { BiTrash } from 'react-icons/bi'
 import { BsPlus } from 'react-icons/bs'
 import { HiMinusSm } from 'react-icons/hi'
-import { BiTrash } from 'react-icons/bi'
+import { FormattedNumber } from 'react-intl'
 import { useAdjustOrderLineMutation } from '../../operations/mutation/useAdjustOrderLineMutation'
-import { CustomLink } from '../../utility/CustomLink'
 import { useRemoveItemFromOrder } from '../../operations/mutation/useRemoveItemFromOrder'
+import type { IActiveOrderCartVariants } from '../../operations/query/useActiveOrderCart'
+import { CustomLink } from '../../utility/CustomLink'
 
 const Cart: React.FC<{
   refetchActiveOrderCartData: () => void
@@ -59,10 +59,10 @@ const Cart: React.FC<{
                         fontWeight={600}
                       >
                         <Text w="325px">Variant info</Text>
-                        <Text w="100px">Single price</Text>
+                        <Text w="100px" textAlign="right">Single price</Text>
                         <Text w="135px">Quantity</Text>
-                        <Text w="100px">Total price</Text>
-                        <Text w="50px">Action</Text>
+                        <Text w="100px" textAlign="right">Total price</Text>
+                        <Text w="50px" textAlign="right">Action</Text>
                       </HStack>
                       <Divider color="primaryText.200"/>
                       {activeOrderCartData?.activeOrder?.lines.map((v, lineId) => {
@@ -75,13 +75,12 @@ const Cart: React.FC<{
                             align="center"
                             justify="space-between"
                           >
-                            <HStack w="325px" justify="space-between">
-                              <NextImage
-                                src={v.productVariant.assets[0].source}
-                                alt={v.productVariant.assets[0].name}
+                            <HStack w="325px" justify="flex-start" whiteSpace="nowrap">
+                              <Image
+                                src={v.productVariant.assets && v.productVariant.assets.length > 0 ? v.productVariant.assets[0].source : '/macbook.png'}
+                                alt={v.productVariant.assets && v.productVariant.assets.length > 0 ? v.productVariant.assets[0].name : 'Standard Picture'}
                                 width={100}
                                 height={100}
-                                layout="intrinsic"
                                 objectFit="contain"
                               />
                               <VStack align="left" spacing="0">
@@ -89,7 +88,7 @@ const Cart: React.FC<{
                                 <Text fontSize="sm">SKU: {v.productVariant.sku}</Text>
                               </VStack>
                             </HStack>
-                            <HStack fontWeight={700} w="100px">
+                            <HStack fontWeight={700} w="100px" justify="right">
                               <FormattedNumber
                                 value={+v.productVariant.priceWithTax / 100}
                                 style="currency"
@@ -114,7 +113,7 @@ const Cart: React.FC<{
                                 borderX="none"
                                 borderColor="secondaryButton.200"
                                 value={v.quantity}
-                                onChange={() => void 0}
+                                readOnly
                               />
                               <IconButton
                                 color="secondaryText.500"
@@ -126,7 +125,7 @@ const Cart: React.FC<{
                                 onClick={() => { addItem(v.productVariant.id, 1, v.productVariant.name) }}
                               />
                             </HStack>
-                            <HStack fontWeight={700} w="100px">
+                            <HStack fontWeight={700} w="100px" justify="right">
                               <FormattedNumber
                                 value={+v.linePriceWithTax / 100}
                                 style="currency"
@@ -157,6 +156,9 @@ const Cart: React.FC<{
                     </Stack>
                     )}
               </CardBody>
+              <CardFooter>
+
+              </CardFooter>
             </>
             )
           : (

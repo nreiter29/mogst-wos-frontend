@@ -1,6 +1,6 @@
 import { Box, Button, Card, CardBody, CardFooter, CardHeader, Container, Flex, Heading, HStack, IconButton, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Select, SimpleGrid, Skeleton, Text, useDisclosure, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { BsPlus } from 'react-icons/bs'
 import { HiMinusSm } from 'react-icons/hi'
 import { FormattedNumber } from 'react-intl'
@@ -41,14 +41,12 @@ function checkSku (products: IProductsSlug, selectedValue: string, setSku: (v: s
 const ProductPage: React.FC<{
   activeCustomerData?: IActiveCustomerData
   refetch: () => void
-  refetchActiveOrderCartData: () => void
   addItem: (productVariantId: number, quantity: number, productName?: string) => void
   activeOrderCartData: IActiveOrderCartVariants | undefined
   loginSuccesfully: boolean
 }> = ({
   activeCustomerData,
   refetch: refetchActiveCustomerData,
-  refetchActiveOrderCartData,
   addItem,
   activeOrderCartData,
   loginSuccesfully,
@@ -67,7 +65,7 @@ const ProductPage: React.FC<{
   useEffect(() => {
     refetch()
     refetchActiveCustomerData()
-  }, [query.sku, refetch])
+  }, [query.sku, refetch, refetchActiveCustomerData])
 
   useMemo(() => {
     if (products && selectedValue) {
@@ -248,7 +246,7 @@ const ProductPage: React.FC<{
                         rounded="none"
                         borderX="none"
                         borderColor="secondaryButton.200"
-                        onChange={() => void 0}
+                        readOnly
                       />
                       <IconButton
                         color="secondaryText.500"
