@@ -26,7 +26,7 @@
         "dayjs": "^1.11.7",
         "fetch-cookie": "^2.1.0",
         "framer-motion": "^6.5.1",
-        "graphql": "^16.6.0",
+        "graphql": "^16.8.1",
         "graphql-request": "^5.1.0",
         "html-react-parser": "^3.0.6",
         "next": "^13.1.1",
